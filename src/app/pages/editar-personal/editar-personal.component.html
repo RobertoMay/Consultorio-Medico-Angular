@@ -1,0 +1,107 @@
+<app-header></app-header>
+
+<div class="container mt-5">
+
+    <div class="col-sm-10 mb-4">
+        <div class="row">
+            <h1>Edita un Paciente</h1>
+            <p>Ingresa los datos para editar al paciente.</p>
+        </div>
+    </div>
+
+    <div *ngIf="isSuccess" class="alert alert-success alerta bi bi-check" role="alert">
+        {{ answer }}
+    </div>
+    <div *ngIf="error" class="alert alert-danger alerta bi bi-exclamation-triangle-fill" role="alert">
+        {{ answer }}
+    </div>
+    <div *ngIf="warning" class="alert alert-warning alerta bi bi-exclamation-triangle" role="alert">
+        {{ answer }}
+    </div>
+
+    <form [formGroup]="form" (submit)="update()">
+        <div class="row justify-content-center">
+            <div class="col-sm-6">
+                <div class="mb-3">
+                    <label class="form-label">Nombre</label>
+                    <input type="text" class="form-control" formControlName="Nombre" placeholder="Nombre" [value]="">
+                    <ng-container *ngIf="form.get('Nombre').touched && form.get('Nombre').errors">
+                        <div class="form-text text-danger" *ngIf="form.get('Nombre').errors.required">
+                            Ingresa el nombre
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="mb-3">
+                    <label class="form-label">Apellido</label>
+                    <input type="text" class="form-control" formControlName="Apellido" placeholder="Apellido"
+                        [value]="">
+                    <ng-container *ngIf="form.get('Apellido').touched && form.get('Apellido').errors">
+                        <div class="form-text text-danger" *ngIf="form.get('Apellido').errors.required">
+                            Ingresa el apellido
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-sm-6">
+                <div class="mb-3">
+                    <label class="form-label">Cargo</label>
+                    <input type="text" class="form-control" formControlName="Cargo"
+                        placeholder="Cargo" [value]="">
+                    <ng-container *ngIf="form.get('Cargo').touched && form.get('Cargo').errors">
+                        <div class="form-text text-danger" *ngIf="form.get('Cargo').errors.required">
+                            Ingresa el cargo
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="mb-3">
+                    <label class="form-label">Teléfono</label>
+                    <input type="text" class="form-control" formControlName="Telefono" placeholder="Teléfono" [value]="">
+                    <ng-container *ngIf="form.get('Telefono').touched && form.get('Telefono').errors">
+                        <div class="form-text text-danger" *ngIf="form.get('Telefono').errors.required">
+                            Ingresa el teléfono
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-sm-6">
+                <div class="mb-3">
+                    <label class="form-label">Correo electrónico</label>
+                    <div class="div input-group">
+                        <span class="input-group-text" id="inputGroupPretend">@</span>
+                        <input type="text" class="form-control" formControlName="CorreoElectronico"
+                            placeholder="Correo electrónico" [value]="">
+
+                    </div>
+                    <ng-container *ngIf="form.get('CorreoElectronico').touched && form.get('CorreoElectronico').invalid">
+                        <div class="form-text text-danger" *ngIf="form.get('CorreoElectronico').invalid">
+                            Ingrese un correo valido
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="mb-3">
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center py-2">
+            <div class="col-1">
+                <button class="btn btn-warning" (click)="volver()">Volver</button>
+            </div>
+            <div class="col-1">
+                <button class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<app-footer></app-footer>

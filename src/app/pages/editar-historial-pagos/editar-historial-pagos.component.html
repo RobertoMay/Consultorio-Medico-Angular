@@ -1,0 +1,124 @@
+<app-header></app-header>
+
+<div class="container mt-5">
+
+    <div class="col-sm-10 mb-4">
+        <div class="row">
+            <h1>Edita el historial de pagos</h1>
+            <p>Ingresa los datos para editar el historial de pago.</p>
+        </div>
+    </div>
+
+    <div *ngIf="isSuccess" class="alert alert-success alerta bi bi-check" role="alert">
+        {{ answer }}
+    </div>
+    <div *ngIf="error" class="alert alert-danger alerta bi bi-exclamation-triangle-fill" role="alert">
+        {{ answer }}
+    </div>
+    <div *ngIf="warning" class="alert alert-warning alerta bi bi-exclamation-triangle" role="alert">
+        {{ answer }}
+    </div>
+
+    <form [formGroup]="form" (submit)="update()">
+        <div class="row justify-content-center">
+            <div class="col-sm-6">
+                <div class="mb-3">
+                    <label class="form-label">Id Factura</label>
+                    <input type="number" class="form-control" formControlName="ID_Factura" placeholder="ID Factura"
+                        [value]="">
+                    <ng-container *ngIf="form.get('ID_Factura').touched && form.get('ID_Factura').errors">
+                        <div class="form-text text-danger" *ngIf="form.get('ID_Factura').errors.required">
+                            Ingresa el id de la factura
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="mb-3">
+                    <label class="form-label">Fecha de pago</label>
+                    <input type="date" class="form-control" formControlName="FechaPago" placeholder="Fecha de pago"
+                        [value]="">
+                    <ng-container *ngIf="form.get('FechaPago').touched && form.get('FechaPago').errors">
+                        <div class="form-text text-danger" *ngIf="form.get('FechaPago').errors.required">
+                            Ingresa la fecha
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-sm-6">
+                <div class="mb-3">
+                    <label class="form-label">Monto</label>
+                    <input type="number" class="form-control" formControlName="Monto" placeholder="Monto" [value]="">
+                    <ng-container *ngIf="form.get('Monto').touched && form.get('Monto').errors">
+                        <div class="form-text text-danger" *ngIf="form.get('Monto').errors.required">
+                            Ingresa el monto
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+            <div class="col-sm-6">
+
+            </div>
+        </div>
+        <div class="row justify-content-center">
+        </div>
+
+        <div class="row justify-content-center py-2">
+            <div class="col-1">
+                <button class="btn btn-warning" (click)="volver()">Volver</button>
+            </div>
+            <div class="col-1">
+                <button class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </form>
+
+
+   <!-- FACTURAS -->
+
+   <div class="row">
+    <div class="col-md-12 mt-5">
+        <h3>Lista de las facturas</h3>
+        <button class="btn btn-info bg-theme" routerLink="/facturas">Ver</button>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="row">
+        <div class="col-md-12 mt-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <table class="table row-border hover">
+                            <thead>
+                                <tr>
+                                    <th> ID Factura. </th>
+                                    <th> Paciente </th>
+                                    <th> Fecha de facturación </th>
+                                    <th> Total</th>
+                                    <th> EstadoPago </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr *ngFor="let o of facturas">
+                                    <td class="col-1"> {{ o.ID_Factura }} </td>
+                                    <td class="col-2"> {{ o.paciente.Nombre}} </td>
+                                    <td class="col-3"> {{ o.FechaFacturacion | date: "dd/MM/yyy"}} </td>
+                                    <td class="col-2"> ${{ o.Total }} </td>
+                                    <td class="col-2"> {{ o.EstadoPago }} </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<br><br>
+<app-footer></app-footer>

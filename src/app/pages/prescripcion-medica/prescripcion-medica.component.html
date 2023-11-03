@@ -1,0 +1,71 @@
+<app-header></app-header>
+
+<div class="container mb-1">
+
+    <div class="row">
+        <div class="col-md-12 mt-5">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <h3 class="text-theme-center">Lista de todas las prescripciones médicas</h3>
+                    <p>Desde aquí puedes manipular las prescripciones</p>
+
+                    <button class="btn btn-info bg-theme" (click)="newPatient()">Agregar un nueva prescripción</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 mt-5">
+            <div class="col-md-12 mt-5">
+                <div *ngIf="isSuccess" class="alert alert-success alerta bi bi-check" role="alert">
+                    {{ answer }}
+                </div>
+                <div *ngIf="error" class="alert alert-danger alerta bi bi-exclamation-triangle-fill" role="alert">
+                    {{ answer }}
+                </div>
+                <div *ngIf="warning" class="alert alert-warning alerta bi bi-exclamation-triangle" role="alert">
+                    {{ answer }}
+                </div>
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <table class="table row-border hover">
+                            <thead>
+                                <tr>
+                                    <th> No. </th>
+                                    <th> Paciente </th>
+                                    <th> Médico </th>
+                                    <th> Medicamento </th>
+                                    <th> Dosis </th>
+                                    <th> Fecha de emisión </th>
+                                    <th> Acciones </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr *ngFor="let o of prescripcionMedicas; let i = index">
+                                    <td class="col-1"> {{ i+1 }} </td>
+                                    <td class="col-2"> {{ o.paciente.Nombre}} </td>
+                                    <td class="col-2"> {{ o.medico.Nombre }} </td>
+                                    <td class="col-2"> {{ o.Medicamento }} </td>
+                                    <td class="col-2"> {{ o.Dosis }} </td>
+                                    <td class="col-2"> {{ o.FechaEmision | date: "dd/MM/yyy"}} </td>
+                                    <td class="col-1">
+                                        <button class="btn btn-sm btn-warning m-1 bi bi-pen"
+                                            (click)="editPatient(o.ID_Prescripcion)"></button>
+                                        <button type="button" class="btn btn-sm btn-danger m-1 bi bi-trash"
+                                            (click)="delete(o.ID_Prescripcion)"></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br><br>
+<app-footer></app-footer>

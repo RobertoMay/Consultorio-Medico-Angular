@@ -1,0 +1,152 @@
+<app-header></app-header>
+
+<div class="container mt-5">
+
+    <div class="col-sm-10 mb-4">
+        <div class="row">
+            <h1>Crea el Historial Médico</h1>
+            <p>Ingresa los datos para crear un nuevo historail.</p>
+        </div>
+    </div>
+
+    <div *ngIf="isSuccess" class="alert alert-success alerta bi bi-check" role="alert">
+        {{ answer }}
+    </div>
+    <div *ngIf="error" class="alert alert-danger alerta bi bi-exclamation-triangle-fill" role="alert">
+        {{ answer }}
+    </div>
+    <div *ngIf="warning" class="alert alert-warning alerta bi bi-exclamation-triangle" role="alert">
+        {{ answer }}
+    </div>
+
+    <form [formGroup]="form" (submit)="create()">
+        <div class="row justify-content-center">
+            <div class="col-sm-6">
+                <div class="mb-3">
+                    <label class="form-label">Id paciente</label>
+                    <input type="number" class="form-control" formControlName="ID_Paciente" placeholder="ID Paciente"
+                        [value]="">
+                    <ng-container *ngIf="form.get('ID_Paciente').touched && form.get('ID_Paciente').errors">
+                        <div class="form-text text-danger" *ngIf="form.get('ID_Paciente').errors.required">
+                            Ingresa al paciente
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="mb-3">
+                    <label class="form-label">Fecha de registro</label>
+                    <input type="date" class="form-control" formControlName="FechaRegistro"
+                        placeholder="Fecha de registro" [value]="">
+                    <ng-container *ngIf="form.get('FechaRegistro').touched && form.get('FechaRegistro').errors">
+                        <div class="form-text text-danger" *ngIf="form.get('FechaRegistro').errors.required">
+                            Ingresa la fecha
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-sm-6">
+                <div class="mb-3">
+                    <label class="form-label">Diagnóstico</label>
+                    <input type="text" class="form-control" formControlName="Diagnostico" placeholder="Diagnóstico"
+                        [value]="">
+                    <ng-container *ngIf="form.get('Diagnostico').touched && form.get('Diagnostico').errors">
+                        <div class="form-text text-danger" *ngIf="form.get('Diagnostico').errors.required">
+                            Ingresa el diagnóstico
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+           
+            <div class="col-sm-6">
+                <div class="mb-3">
+                    <label class="form-label">Tratamiento</label>
+                    <input type="text" class="form-control" formControlName="Tratamiento" placeholder="Tratamiento"
+                        [value]="">
+                    <ng-container *ngIf="form.get('Tratamiento').touched && form.get('Tratamiento').errors">
+                        <div class="form-text text-danger" *ngIf="form.get('Tratamiento').errors.required">
+                            Ingresa el Tratamiento
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-sm-6">
+                <div class="mb-3">
+                    <label class="form-label">Notas médicas</label>
+                    <input type="text" class="form-control" formControlName="NotasMedicas" placeholder="Notas Medicas"
+                        [value]="">
+                    <ng-container *ngIf="form.get('NotasMedicas').touched && form.get('NotasMedicas').errors">
+                        <div class="form-text text-danger" *ngIf="form.get('NotasMedicas').errors.required">
+                            Ingresa las notas médicas
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="mb-3">
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center py-2">
+            <div class="col-1">
+                <button class="btn btn-warning" (click)="volver()">Volver</button>
+            </div>
+            <div class="col-1">
+                <button class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </form>
+
+    <!-- PACIENTES -->
+
+    <div class="row">
+        <div class="col-md-12 mt-5">
+            <h3>Lista de los pacientes</h3>
+            <button class="btn btn-info bg-theme" routerLink="/pacientes">Ver</button>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-12 mt-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <table class="table row-border hover">
+                            <thead>
+                                <tr>
+                                    <th> ID </th>
+                                    <th> Nombre </th>
+                                    <th> Apellido </th>
+                                    <th> Télefono </th>
+                                    <th> Correo </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr *ngFor="let paciente of pacientes">
+                                    <td class="col-2"> {{ paciente.ID_Paciente }} </td>
+                                    <td class="col-3"> {{paciente.Nombre}} </td>
+                                    <td class="col-2"> {{ paciente.Apellido }} </td>
+                                    <td class="col-2"> {{ paciente.Telefono }} </td>
+                                    <td class="col-3"> {{ paciente.CorreoElectronico }} </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<br><br>
+<app-footer></app-footer>
