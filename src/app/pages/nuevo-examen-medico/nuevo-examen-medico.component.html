@@ -90,7 +90,15 @@
     <div class="row">
         <div class="col-md-12 mt-5">
             <h3>Lista de los pacientes</h3>
-            <button class="btn btn-info bg-theme" routerLink="/pacientes">Ver</button>
+        </div>
+    </div>
+    <div class="row col-5 mb-2 mt-2">
+        <div class="input-group rounded" >
+            <input type="search" class="form-control rounded" placeholder="Buscar" aria-label="Search"
+                aria-describedby="search-addon" id="search" [(ngModel)]="searchTerm" (input)="search()"/>
+            <span class="input-group-text border-0 nb" id="search-addon">
+                <i class="bi bi-search"></i>
+            </span>
         </div>
     </div>
 
@@ -112,7 +120,7 @@
                             </thead>
 
                             <tbody>
-                                <tr *ngFor="let paciente of pacientes">
+                                <tr *ngFor="let paciente of filteredCitasList">
                                     <td class="col-2"> {{ paciente.ID_Paciente }} </td>
                                     <td class="col-3"> {{paciente.Nombre}} </td>
                                     <td class="col-2"> {{ paciente.Apellido }} </td>

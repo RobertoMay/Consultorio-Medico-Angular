@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { CitaPostI, ListaPacientesI, MedicoI } from 'src/shared/models';
+import { CitaPostI, HorariosMedicosI, ListaPacientesI, MedicoI } from 'src/shared/models';
 import { CitaService } from 'src/shared/services/cita.service';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { PacientesService } from 'src/shared/services/pacientes.service';
 import { MedicoService } from 'src/shared/services/medico.service';
+import { HorariosMedicosService } from 'src/shared/services/horarios-medicos.service';
 
 @Component({
   selector: 'app-editar-cita',
@@ -17,10 +18,14 @@ export class EditarCitaComponent implements OnInit {
   cita!: CitaPostI;
   pacientes!: ListaPacientesI[];
   medicos!: MedicoI[];
+  horarios!: HorariosMedicosI[];
+  horariosP: HorariosMedicosI[] = [];
   error?: boolean;
   answer?: string;
   warning?: boolean;
   isSuccess?: boolean;
+  rol!: string;
+  id!: number;
 
   constructor(
     private fb: FormBuilder,
@@ -30,18 +35,24 @@ export class EditarCitaComponent implements OnInit {
     private pd: DatePipe,
     private pacientesService: PacientesService,
     private medicoService: MedicoService,
+    private horariosService: HorariosMedicosService,
   ) { this.setForm() }
 
   ngOnInit(): void {
     if (localStorage.getItem('token')) {
       let citaId = Number(this.activeRouter.snapshot.paramMap.get('id'));
+      this.rol = localStorage.getItem('rol')!;
+      this.id = Number(localStorage.getItem('id'))!;
+      // if (this.rol == 'Paciente') {
+      //   this.router.navigate(['citas']);
+      // }
       this.api.getId(citaId).subscribe(data => {
         this.cita = data;
         this.form.setValue({
           ID_Cita: citaId,
           ID_Paciente: this.cita.ID_Paciente,
           ID_Medico: this.cita.ID_Medico,
-          FechaHoraCita: this.pd.transform(this.cita.FechaHoraCita , "yyyy-MM-ddThh:mm"),
+          FechaHoraCita: this.pd.transform(this.cita.FechaHoraCita, "yyyy-MM-ddThh:mm"),
           MotivoCita: this.cita.MotivoCita,
           EstadoCita: this.cita.EstadoCita,
         })
@@ -60,6 +71,18 @@ export class EditarCitaComponent implements OnInit {
         })
       this.medicoService.getAll().subscribe(data => {
         this.medicos = data;
+      },
+        error => {
+          let message = "Error: " + error.status + " Ha ocurrio un error en el servidor al cargar los datos";
+          this.showAnswerError(message);
+        })
+      this.horariosService.getAll().subscribe(data => {
+        this.horarios = data;
+        for (let index = 0; index < this.horarios.length; index++) {
+          if (this.id == this.horarios[index].medico.ID_Medico) {
+            this.horariosP.push(this.horarios[index]);
+          }
+        }
       },
         error => {
           let message = "Error: " + error.status + " Ha ocurrio un error en el servidor al cargar los datos";

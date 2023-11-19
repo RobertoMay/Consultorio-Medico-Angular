@@ -6,11 +6,22 @@
         <div class="col-md-12 mt-5">
             <div class="card shadow-sm">
                 <div class="card-body text-center">
-                    <h3 class="text-theme-center">Lista de todos lo horarios</h3>
-                    <p>Desde aquí puedes manipular los horarios de los médicos</p>
+                    <ng-container *ngIf="rol == 'super-admin'">
+                        <h3 class="text-theme-center">Lista de todos lo horarios</h3>
+                        <p>Desde aquí puedes manipular los horarios de los médicos</p>
+    
+                        <button class="btn btn-info bg-theme" (click)="newPatient()">Agregar un nuevo horario</button>
+                    </ng-container>
+                    
+                    <ng-container *ngIf="rol == 'Paciente'">
+                        <h3 class="text-theme-center">Lista de todos lo horarios</h3>
+                        <p>Desde aquí puedes ver los horarios de los médicos</p>
+                    </ng-container>
 
-                    <button class="btn btn-info bg-theme" (click)="newPatient()">Agregar un nuevo horario</button>
-
+                    <ng-container *ngIf="rol == 'Médico'">
+                        <h3 class="text-theme-center">Lista de tu horario</h3>
+                        <p>Desde aquí puedes ver tu horario</p>
+                    </ng-container>
                 </div>
             </div>
         </div>
@@ -28,35 +39,118 @@
                 <div *ngIf="warning" class="alert alert-warning alerta bi bi-exclamation-triangle" role="alert">
                     {{ answer }}
                 </div>
+
+                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+                    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Borrar horario del médico</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                ¿Estas seguro que deseas borrar el horario de {{ nombre }}?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary"
+                                    data-bs-dismiss="modal">Cancelar</button>
+                                <button type="button" class="btn btn-danger" (click)="borrar()"
+                                    data-bs-dismiss="modal">Aceptar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <ng-container *ngIf="rol == 'super-admin'">
+                    <div class="row col-5 mb-2 mt-2">
+                        <div class="input-group rounded" >
+                            <input type="search" class="form-control rounded" placeholder="Buscar" aria-label="Search"
+                                aria-describedby="search-addon" id="search" [(ngModel)]="searchTerm" (input)="search()"/>
+                            <span class="input-group-text border-0 nb" id="search-addon">
+                                <i class="bi bi-search"></i>
+                            </span>
+                        </div>
+                    </div>
+                </ng-container>
+
                 <div class="card shadow-sm">
                     <div class="card-body">
                         <table class="table row-border hover">
-                            <thead>
-                                <tr>
-                                    <th> No. </th>
-                                    <th> Médico </th>
-                                    <th> Días de la semana </th>
-                                    <th> Hora inicio </th>
-                                    <th> Hora fin </th>
-                                    <th> Acciones </th>
-                                </tr>
-                            </thead>
+                            <ng-container *ngIf="rol == 'super-admin'">
+                                <thead>
+                                    <tr>
+                                        <th> No. </th>
+                                        <th> Médico </th>
+                                        <th> Días de la semana </th>
+                                        <th> Hora inicio </th>
+                                        <th> Hora fin </th>
+                                        <th> Acciones </th>
+                                    </tr>
+                                </thead>
+    
+                                <tbody>
+                                    <tr *ngFor="let o of filteredCitasList; let i = index">
+                                        <td class="col-1"> {{ i+1 }} </td>
+                                        <td class="col-2"> {{ o.medico.Nombre}} </td>
+                                        <td class="col-2"> {{ o.DiaSemana }} </td>
+                                        <td class="col-2"> {{ o.HoraInicio | date:"shortTime"}} </td>
+                                        <td class="col-2"> {{ o.HoraFin | date:"shortTime"}} </td>
+                                        <td class="col-2">
+                                            <button class="btn btn-sm btn-warning m-1 bi bi-pen"
+                                                (click)="editPatient(o.ID_HorarioMedico)"></button>
+                                            <button type="button" class="btn btn-sm btn-danger m-1 bi bi-trash"
+                                                data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                                                (click)="delete(o.ID_HorarioMedico, o.medico.Nombre)"></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </ng-container>
+                            
+                            <ng-container *ngIf="rol == 'Paciente'">
+                                <thead>
+                                    <tr>
+                                        <th> No. </th>
+                                        <th> Médico </th>
+                                        <th> Días de la semana </th>
+                                        <th> Hora inicio </th>
+                                        <th> Hora fin </th>
+                                    </tr>
+                                </thead>
+    
+                                <tbody>
+                                    <tr *ngFor="let o of citas; let i = index">
+                                        <td class="col-2"> {{ i+1 }} </td>
+                                        <td class="col-3"> {{ o.medico.Nombre}} </td>
+                                        <td class="col-3"> {{ o.DiaSemana }} </td>
+                                        <td class="col-2"> {{ o.HoraInicio | date:"shortTime"}} </td>
+                                        <td class="col-2"> {{ o.HoraFin | date:"shortTime"}} </td>
+                                    </tr>
+                                </tbody>
+                            </ng-container>
 
-                            <tbody>
-                                <tr *ngFor="let o of citas; let i = index">
-                                    <td class="col-1"> {{ i+1 }} </td>
-                                    <td class="col-2"> {{ o.medico.Nombre}} </td>
-                                    <td class="col-2"> {{ o.DiaSemana }} </td>
-                                    <td class="col-2"> {{ o.HoraInicio | date:"shortTime"}} </td>
-                                    <td class="col-2"> {{ o.HoraFin | date:"shortTime"}} </td>
-                                    <td class="col-2">
-                                        <button class="btn btn-sm btn-warning m-1 bi bi-pen"
-                                            (click)="editPatient(o.ID_HorarioMedico)"></button>
-                                        <button type="button" class="btn btn-sm btn-danger m-1 bi bi-trash"
-                                            (click)="delete(o.ID_HorarioMedico)"></button>
-                                    </td>
-                                </tr>
-                            </tbody>
+                            <ng-container *ngIf="rol == 'Médico'">
+                                <thead>
+                                    <tr>
+                                        <th> No. </th>
+                                        <th> Médico </th>
+                                        <th> Días de la semana </th>
+                                        <th> Hora inicio </th>
+                                        <th> Hora fin </th>
+                                    </tr>
+                                </thead>
+    
+                                <tbody>
+                                    <tr *ngFor="let o of citasP; let i = index">
+                                        <td class="col-2"> {{ i+1 }} </td>
+                                        <td class="col-3"> {{ o.medico.Nombre}} </td>
+                                        <td class="col-3"> {{ o.DiaSemana }} </td>
+                                        <td class="col-2"> {{ o.HoraInicio | date:"shortTime"}} </td>
+                                        <td class="col-2"> {{ o.HoraFin | date:"shortTime"}} </td>
+                                    </tr>
+                                </tbody>
+                            </ng-container>
+
                         </table>
                     </div>
                 </div>

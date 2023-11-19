@@ -6,10 +6,26 @@
         <div class="col-md-12 mt-5">
             <div class="card shadow-sm">
                 <div class="card-body text-center">
-                    <h3 class="text-theme-center">Lista de todos las citas</h3>
-                    <p>Desde aquí puedes manipular la citas</p>
+                    <ng-container *ngIf="rol == 'super-admin'">
+                        <h3 class="text-theme-center">Lista de todas las citas</h3>
+                        <p>Desde aquí puedes manipular las citas</p>
 
-                    <button class="btn btn-info bg-theme" (click)="newPatient()">Agregar un nueva cita</button>
+                        <button class="btn btn-info bg-theme" (click)="newPatient()">Agregar un nueva cita</button>
+                    </ng-container>
+
+                    <ng-container *ngIf="rol == 'Paciente'">
+                        <h3 class="text-theme-center">Lista de todas mis citas</h3>
+                        <p>Desde aquí puedes ver y agendar citas</p>
+
+                        <button class="btn btn-info bg-theme" (click)="newPatient()">Agregar un nueva cita</button>
+                    </ng-container>
+
+                    <ng-container *ngIf="rol == 'Médico'">
+                        <h3 class="text-theme-center">Lista de todas las citas</h3>
+                        <p>Desde aquí puedes manipular las citas</p>
+
+                        <button class="btn btn-info bg-theme" (click)="newPatient()">Agregar un nueva cita</button>
+                    </ng-container>
 
                 </div>
             </div>
@@ -28,39 +44,143 @@
                 <div *ngIf="warning" class="alert alert-warning alerta bi bi-exclamation-triangle" role="alert">
                     {{ answer }}
                 </div>
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <table class="table row-border hover">
-                            <thead>
-                                <tr>
-                                    <th> No. </th>
-                                    <th> Paciente </th>
-                                    <th> Médico </th>
-                                    <th> Fecha y hora </th>
-                                    <th> Motivo </th>
-                                    <th> Estado </th>
-                                    <th> Acciones </th>
-                                </tr>
-                            </thead>
 
-                            <tbody>
-                                <tr *ngFor="let o of citas; let i = index">
-                                    <td class="col-1"> {{ i+1 }} </td>
-                                    <td class="col-2"> {{ o.paciente.Nombre}} </td>
-                                    <td class="col-2"> {{ o.medico.Nombre }} </td>
-                                    <td class="col-2"> {{ o.FechaHoraCita | date: "dd/MM/yyy, h:mm a"}} </td>
-                                    <td class="col-2"> {{ o.MotivoCita }} </td>
-                                    <td class="col-2"> {{ o.EstadoCita }} </td>
-                                    <td class="col-1">
-                                        <button class="btn btn-sm btn-warning m-1 bi bi-pen"
-                                            (click)="editPatient(o.ID_Cita)"></button>
-                                        <button type="button" class="btn btn-sm btn-danger m-1 bi bi-trash"
-                                            (click)="delete(o.ID_Cita)"></button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+                    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Borrar cita</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                ¿Estas seguro que deseas borrar la cita?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary"
+                                    data-bs-dismiss="modal">Cancelar</button>
+                                <button type="button" class="btn btn-danger" (click)="borrar()"
+                                    data-bs-dismiss="modal">Aceptar</button>
+                            </div>
+                        </div>
                     </div>
+                </div>
+
+                <ng-container *ngIf="rol == 'super-admin'">
+                    <div class="row col-5 mb-2 mt-2">
+                        <div class="input-group rounded" >
+                            <input type="search" class="form-control rounded" placeholder="Buscar" aria-label="Search"
+                                aria-describedby="search-addon" id="search" [(ngModel)]="searchTerm" (input)="search()"/>
+                            <span class="input-group-text border-0 nb" id="search-addon">
+                                <i class="bi bi-search"></i>
+                            </span>
+                        </div>
+                    </div>
+                </ng-container>
+
+                <div class="card shadow-sm">
+
+                    <div class="card-body">
+
+                        <ng-container *ngIf="rol == 'super-admin'">
+                            <table class="table row-border hover">
+                                <thead>
+                                    <tr>
+                                        <th> No. </th>
+                                        <th> Paciente </th>
+                                        <th> Médico </th>
+                                        <th> Fecha y hora </th>
+                                        <th> Motivo </th>
+                                        <th> Estado </th>
+                                        <th> Acciones </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr *ngFor="let o of filteredCitasList; let i = index">
+                                        <td class="col-1"> {{ i+1 }} </td>
+                                        <td class="col-2"> {{ o.paciente.Nombre}} </td>
+                                        <td class="col-2"> {{ o.medico.Nombre }} </td>
+                                        <td class="col-2"> {{ o.FechaHoraCita | date: "dd/MM/yyy, h:mm a"}} </td>
+                                        <td class="col-2"> {{ o.MotivoCita }} </td>
+                                        <td class="col-2"> {{ o.EstadoCita }} </td>
+                                        <td class="col-1">
+                                            <button class="btn btn-sm btn-warning m-1 bi bi-pen"
+                                                (click)="editPatient(o.ID_Cita)"></button>
+                                            <button type="button" class="btn btn-sm btn-danger m-1 bi bi-trash"
+                                                data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                                                (click)="delete(o.ID_Cita)"></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </ng-container>
+
+                        <ng-container *ngIf="rol == 'Paciente'">
+                            <table class="table row-border hover">
+                                <thead>
+                                    <tr>
+                                        <th> No. </th>
+                                        <th> Paciente </th>
+                                        <th> Médico </th>
+                                        <th> Fecha y hora </th>
+                                        <th> Motivo </th>
+                                        <th> Estado </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr *ngFor="let o of citasP, let i = index">
+                                        <td class="col-2"> {{ i+1 }}</td>
+                                        <td class="col-2"> {{ o.paciente.Nombre}} </td>
+                                        <td class="col-2"> {{ o.medico.Nombre }} </td>
+                                        <td class="col-2"> {{ o.FechaHoraCita | date: "dd/MM/yyy, h:mm a"}} </td>
+                                        <td class="col-2"> {{ o.MotivoCita }} </td>
+                                        <td class="col-2"> {{ o.EstadoCita }} </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </ng-container>
+
+                        <ng-container *ngIf="rol == 'Médico'">
+                            <table class="table row-border hover">
+                                <thead>
+                                    <tr>
+                                        <th> No. </th>
+                                        <th> Paciente </th>
+                                        <th> Médico </th>
+                                        <th> Fecha y hora </th>
+                                        <th> Motivo </th>
+                                        <th> Estado </th>
+                                        <th> Acciones </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr *ngFor="let o of citasM; let i = index">
+                                        <td class="col-1"> {{ i+1 }} </td>
+                                        <td class="col-2"> {{ o.paciente.Nombre}} </td>
+                                        <td class="col-2"> {{ o.medico.Nombre }} </td>
+                                        <td class="col-2"> {{ o.FechaHoraCita | date: "dd/MM/yyy, h:mm a"}} </td>
+                                        <td class="col-2"> {{ o.MotivoCita }} </td>
+                                        <td class="col-2"> {{ o.EstadoCita }} </td>
+                                        <td class="col-1">
+                                            <button class="btn btn-sm btn-warning m-1 bi bi-pen"
+                                                (click)="editPatient(o.ID_Cita)"></button>
+                                            <button type="button" class="btn btn-sm btn-danger m-1 bi bi-trash"
+                                                data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                                                (click)="delete(o.ID_Cita)"></button>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </ng-container>
+
+                    </div>
+
+
                 </div>
             </div>
         </div>

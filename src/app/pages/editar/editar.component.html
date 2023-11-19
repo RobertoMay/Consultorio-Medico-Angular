@@ -60,8 +60,14 @@
             </div>
             <div class="col-sm-6">
                 <div class="mb-3">
-                    <label class="form-label">Genero</label>
-                    <input type="text" class="form-control" formControlName="Genero" placeholder="Escuela" [value]="">
+                    <label class="form-label">Genero</label><br>
+                    <div class="btn-group" role="group" aria-label="Genero">
+                        <input type="radio" class="" name="Genero" id="male" value="M" autocomplete="off" formControlName="Genero">
+                        <label class="ms-2 me-2" for="male">M</label>
+            
+                        <input type="radio" class="" name="Genero" id="female" value="F" autocomplete="off" formControlName="Genero">
+                        <label class="ms-2 me-2" for="female">F</label>
+                    </div>
                     <ng-container *ngIf="form.get('Genero').touched && form.get('Genero').errors">
                         <div class="form-text text-danger" *ngIf="form.get('Genero').errors.required">
                             Ingresa el género

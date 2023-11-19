@@ -25,7 +25,7 @@
                 <div class="mb-3">
                     <label class="form-label">Id paciente</label>
                     <input type="number" class="form-control" formControlName="ID_Paciente" placeholder="ID Paciente"
-                        [value]="">
+                        [value]="" readonly>
                     <ng-container *ngIf="form.get('ID_Paciente').touched && form.get('ID_Paciente').errors">
                         <div class="form-text text-danger" *ngIf="form.get('ID_Paciente').errors.required">
                             Ingresa al paciente
@@ -51,7 +51,7 @@
             <div class="col-sm-6">
                 <div class="mb-3">
                     <label class="form-label">Total</label>
-                    <input type="text" class="form-control" formControlName="Total" placeholder="Total"
+                    <input type="number" class="form-control" formControlName="Total" placeholder="Total"
                         [value]="">
                     <ng-container *ngIf="form.get('Total').touched && form.get('Total').errors">
                         <div class="form-text text-danger" *ngIf="form.get('Total').errors.required">
@@ -63,8 +63,11 @@
             <div class="col-sm-6">
                 <div class="mb-3">
                     <label class="form-label">Estado</label>
-                    <input type="text" class="form-control" formControlName="EstadoPago" placeholder="Estado"
-                        [value]="">
+                    <select class="form-select" formControlName="EstadoPago">
+                        <option value="" selected>Estado</option>
+                        <option value="Pendiente">Pendiente</option>
+                        <option value="Pagada">Pagada</option>
+                    </select>
                     <ng-container *ngIf="form.get('EstadoPago').touched && form.get('EstadoPago').errors">
                         <div class="form-text text-danger" *ngIf="form.get('EstadoPago').errors.required">
                             Ingresa el estado
@@ -86,48 +89,6 @@
         </div>
     </form>
 
-
-    <!-- PACIENTES -->
-
-    <div class="row">
-        <div class="col-md-12 mt-5">
-            <h3>Lista de los pacientes</h3>
-            <button class="btn btn-info bg-theme" routerLink="/pacientes">Ver</button>
-        </div>
-    </div>
-
-
-    <div class="row">
-        <div class="col-md-12">
-            <div class="col-md-12 mt-4">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <table class="table row-border hover">
-                            <thead>
-                                <tr>
-                                    <th> ID </th>
-                                    <th> Nombre </th>
-                                    <th> Apellido </th>
-                                    <th> Télefono </th>
-                                    <th> Correo </th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                <tr *ngFor="let paciente of pacientes">
-                                    <td class="col-2"> {{ paciente.ID_Paciente }} </td>
-                                    <td class="col-3"> {{paciente.Nombre}} </td>
-                                    <td class="col-2"> {{ paciente.Apellido }} </td>
-                                    <td class="col-2"> {{ paciente.Telefono }} </td>
-                                    <td class="col-3"> {{ paciente.CorreoElectronico }} </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 
 

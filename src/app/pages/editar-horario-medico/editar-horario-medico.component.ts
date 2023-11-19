@@ -19,6 +19,8 @@ export class EditarHorarioMedicoComponent implements OnInit{
   answer?: string;
   warning?: boolean;
   isSuccess?: boolean;
+  rol!: string;
+  id!: number;
 
   constructor(
     private fb: FormBuilder,
@@ -32,6 +34,11 @@ export class EditarHorarioMedicoComponent implements OnInit{
   ngOnInit(): void {
     if (localStorage.getItem('token')) {
       let citaId = Number(this.activeRouter.snapshot.paramMap.get('id'));
+      this.rol = localStorage.getItem('rol')!;
+      this.id = Number(localStorage.getItem('id'))!;
+      if (this.rol != 'super-admin') {
+        this.router.navigate(['horarios-medicos']);
+      }
       this.api.getId(citaId).subscribe(data => {
         this.horarioMedico = data;
         this.form.setValue({

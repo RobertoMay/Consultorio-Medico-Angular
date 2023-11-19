@@ -35,7 +35,11 @@
             <div class="col-sm-6">
                 <div class="mb-3">
                     <label class="form-label">Rol</label>
-                    <input type="text" class="form-control" formControlName="Rol" placeholder="Rol" [value]="">
+                    <select class="form-select" formControlName="Rol">
+                        <option value="" selected>Selecciona Rol</option>
+                        <option value="Paciente">Paciente</option>
+                        <option value="Médico">Médico</option>
+                    </select>
                     <ng-container *ngIf="form.get('Rol').touched && form.get('Rol').errors">
                         <div class="form-text text-danger" *ngIf="form.get('Rol').errors.required">
                             Ingresa el rol
@@ -54,7 +58,8 @@
                             placeholder="Correo electrónico" [value]="">
 
                     </div>
-                    <ng-container *ngIf="form.get('CorreoElectronico').touched && form.get('CorreoElectronico').invalid">
+                    <ng-container
+                        *ngIf="form.get('CorreoElectronico').touched && form.get('CorreoElectronico').invalid">
                         <div class="form-text text-danger" *ngIf="form.get('CorreoElectronico').invalid">
                             Ingrese un correo valido
                         </div>
@@ -89,6 +94,8 @@
             </div>
         </div>
     </form>
+
 </div>
 
+<br><br>
 <app-footer></app-footer>

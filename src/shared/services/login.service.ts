@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { LoginI, ResponseI, UsuarioI } from '../models';
+import { LoginI, ResponseI, UsuarioI, UsuarioPostI } from '../models';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Subject, tap } from 'rxjs'
 
@@ -25,13 +25,18 @@ export class LoginService {
     return this.http.get<UsuarioI[]>(this.url);
   }
 
-  getId(id: any): Observable<UsuarioI> {
+  getId(id: any): Observable<UsuarioPostI> {
     let direction = this.url + 'Id/' + id;
-    return this.http.get<UsuarioI>(direction)
+    return this.http.get<UsuarioPostI>(direction)
   }
 
   put(form: any): Observable<any> {
     let direction = this.url + 'update';
+    return this.http.post<any>(direction, form);
+  }
+
+  putNP(form: any): Observable<any> {
+    let direction = this.url + 'updateNP';
     return this.http.post<any>(direction, form);
   }
 

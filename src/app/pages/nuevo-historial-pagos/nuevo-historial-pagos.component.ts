@@ -17,6 +17,8 @@ export class NuevoHistorialPagosComponent implements OnInit{
   warning?: boolean;
   isSuccess?: boolean;
   form: FormGroup | any;
+  filteredCitasList: any[] = [];
+  searchTerm: string = '';
 
   constructor(
     private fb: FormBuilder, 
@@ -30,8 +32,7 @@ export class NuevoHistorialPagosComponent implements OnInit{
       this.setForm();
       this.facturaService.getAll().subscribe(data => {
         this.facturas = data;
-        console.log(data);
-        
+        this.filteredCitasList = data;
       },
         error => {
           let message = "Error: " + error.status + " Ha ocurrio un error en el servidor al cargar los datos";
@@ -75,6 +76,17 @@ export class NuevoHistorialPagosComponent implements OnInit{
 
   volver() {
     this.router.navigate(['historial-pagos'])
+  }
+
+  search() {
+    if (this.searchTerm) {
+      this.filteredCitasList = this.facturas.filter((cita) =>
+        cita.ID_Factura.toString().includes(this.searchTerm) ||
+        cita.paciente.Nombre.toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
+    } else {
+      this.filteredCitasList = this.facturas; 
+    }
   }
 
   showAnswer(answer: any) {

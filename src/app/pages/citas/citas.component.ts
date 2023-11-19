@@ -11,18 +11,41 @@ import { Subscription } from 'rxjs';
 })
 export class CitasComponent implements OnInit {
   citas!: CitaI[];
+  citasP: CitaI[] = [];
+  citasM: CitaI[] = [];
   suscription!: Subscription;
   error?: boolean;
   answer?: string;
   warning?: boolean;
   isSuccess?: boolean;
+  idBorrar?: number;
+  rol!: string;
+  id!: number;
+  contador!: number;
+  filteredCitasList: any[] = [];
+  searchTerm: string = '';
 
-  constructor(private api: CitaService, private router: Router) { }
+  constructor(private api: CitaService, private router: Router) { this.contador = 0; }
 
   ngOnInit(): void {
+
     if (localStorage.getItem('token')) {
+      this.rol = localStorage.getItem('rol')!;
+      this.id = Number(localStorage.getItem('id'))!;
       this.api.getAll().subscribe(data => {
         this.citas = data;
+        this.filteredCitasList = this.citas;
+
+        for (let index = 0; index < this.citas.length; index++) {
+          if (this.id == this.citas[index].paciente.ID_Paciente) {
+            this.citasP.push(this.citas[index]);
+          }
+
+          if (this.id == this.citas[index].medico.ID_Medico) {
+            this.citasM.push(this.citas[index]);
+          }
+        }
+
       },
         error => {
           let message = "Error: " + error.status + " Ha ocurrio un error en el servidor al cargar los datos";
@@ -31,9 +54,18 @@ export class CitasComponent implements OnInit {
 
       this.suscription = this.api.refresh$.subscribe(() => {
         this.api.getAll().subscribe(data => {
-          this.citas = data;
+          this.filteredCitasList = data;
+          let aux: CitaI[] = [];
+          for (let index = 0; index < this.filteredCitasList.length; index++) {
+            if (this.id == this.citas[index].medico.ID_Medico) {
+              aux.push(this.citas[index]);
+            }
+          }
+          this.citasM = aux;
         })
       })
+
+
     } else {
       this.router.navigate(['login'])
     }
@@ -47,15 +79,29 @@ export class CitasComponent implements OnInit {
     this.router.navigate(['nuevo-cita']);
   }
 
-  delete(id: number) {
-    this.api.delete(id).subscribe(data => {
+  borrar() {
+    this.api.delete(this.idBorrar!).subscribe(data => {
       this.showAnswer("Cita borradoa con éxito");
     },
       error => {
         let message = "Error: " + error.status + " La cita se encuentra relacionado con otra tabla";
         this.showAnswerError(message);
       })
+  }
 
+  delete(id: number) {
+    this.idBorrar = id;
+  }
+
+  search() {
+    if (this.searchTerm) {
+      this.filteredCitasList = this.citas.filter((cita) =>
+        cita.paciente.Nombre.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        cita.medico.Nombre.toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
+    } else {
+      this.filteredCitasList = this.citas;
+    }
   }
 
   showAnswer(answer: any) {
@@ -74,6 +120,13 @@ export class CitasComponent implements OnInit {
     this.warning = true;
     this.answer = answer;
     setTimeout(() => { this.warning = false }, 5000)
+  }
+
+  getIncrementedCounter(index: number): number {
+    if (index === this.citas.length - 1) {
+      this.contador = this.contador + 1;
+    }
+    return this.contador;
   }
 
 }

@@ -16,13 +16,24 @@ export class MedicosComponent implements OnInit {
   answer?: string;
   warning?: boolean;
   isSuccess?: boolean;
+  idBorrar?: number;
+  nombre?: string
+  rol!: string;
+  filteredCitasList: any[] = [];
+  searchTerm: string = '';
 
   constructor(private api: MedicoService, private router: Router) { }
 
   ngOnInit(): void {
     if (localStorage.getItem('token')) {
+      this.rol = localStorage.getItem('rol')!;
+      if (this.rol == 'Médico') {
+        this.router.navigate(['dashboard']);
+      }
       this.api.getAll().subscribe(data => {
         this.medicos = data;
+        this.filteredCitasList = this.medicos;
+
       },
         error => {
           let message = "Error: " + error.status + " Ha ocurrio un error en el servidor al cargar los datos";
@@ -32,6 +43,7 @@ export class MedicosComponent implements OnInit {
       this.suscription = this.api.refresh$.subscribe(() => {
         this.api.getAll().subscribe(data => {
           this.medicos = data;
+          this.filteredCitasList = data;
         })
       })
     } else {
@@ -47,15 +59,30 @@ export class MedicosComponent implements OnInit {
     this.router.navigate(['nuevo-medico']);
   }
 
-  delete(id: number) {
-    this.api.delete(id).subscribe(data => {
+  borrar() {
+    this.api.delete(this.idBorrar!).subscribe(data => {
       this.showAnswer("Médico borrado con éxito");
     },
       error => {
         let message = "Error: " + error.status + " El médico se encuentra relacionado con otra tabla";
         this.showAnswerError(message);
       })
+  }
 
+  delete(id: number, nombre: string) {
+    this.idBorrar = id;
+    this.nombre = nombre;
+  }
+
+  search() {
+    if (this.searchTerm) {
+      this.filteredCitasList = this.medicos.filter((cita) =>
+        cita.ID_Medico.toString().includes(this.searchTerm) ||
+        cita.Nombre.toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
+    } else {
+      this.filteredCitasList = this.medicos; 
+    }
   }
 
   showAnswer(answer: any) {

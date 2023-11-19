@@ -1,5 +1,74 @@
-<nav class="navbar navbar-dark bg-dark">
-    <span class="navbar-text">
-        Consultorio Médico
-    </span>
-</nav>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="logo"><a routerLink="/dashboard"><img src="../../../assets/logo.png"></a></div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+       <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ng-container>
+         <ul class="navbar-nav mr-auto" *ngIf="rol == 'super-admin'">
+            <li class="nav-item active">
+               <a class="nav-link i" routerLink="/dashboard">Inicio</a>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link" routerLink="/pacientes">Pacientes</a>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link" routerLink="/medicos">Médicos</a>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link" routerLink="/citas">Citas</a>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link" routerLink="/usuarios">Usuarios</a>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link" (click)="close()" href="">Cerrar sesión</a>
+            </li>
+         </ul>
+
+         <ul class="navbar-nav mr-auto" *ngIf="rol == 'Paciente'">
+            <li class="nav-item active">
+               <a class="nav-link i" routerLink="/dashboard">Inicio</a>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link" routerLink="/medicos">Médicos</a>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link" routerLink="/citas">Citas</a>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link" routerLink="/historial-medicos">Historial</a>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link" routerLink="/prescripcion-medicas">Prescripciones</a>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link" (click)="close()" href="">Cerrar sesión</a>
+            </li>
+         </ul>
+
+         <ul class="navbar-nav mr-auto" *ngIf="rol == 'Médico'">
+            <li class="nav-item active">
+               <a class="nav-link i" routerLink="/dashboard">Inicio</a>
+            </li>
+            
+            <li class="nav-item">
+               <a class="nav-link" routerLink="/citas">Citas</a>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link" routerLink="/historial-medicos">Historiales</a>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link" routerLink="/prescripcion-medicas">Prescripciones</a>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link" routerLink="/horarios-medicos">Horario</a>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link" (click)="close()" href="">Cerrar sesión</a>
+            </li>
+         </ul>
+      </ng-container>
+      
+    </div>
+ </nav>

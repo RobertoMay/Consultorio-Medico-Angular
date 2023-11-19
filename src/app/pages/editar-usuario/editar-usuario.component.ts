@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { UsuarioI } from 'src/shared/models';
+import { ListaPacientesI, MedicoI, UsuarioI, UsuarioPostI } from 'src/shared/models';
 import { LoginService } from 'src/shared/services/login.service';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { DatePipe } from '@angular/common';
+import { PacientesService } from 'src/shared/services/pacientes.service';
+import { MedicoService } from 'src/shared/services/medico.service';
 
 @Component({
   selector: 'app-editar-usuario',
@@ -11,8 +13,10 @@ import { DatePipe } from '@angular/common';
   styleUrls: ['./editar-usuario.component.css']
 })
 export class EditarUsuarioComponent implements OnInit {
+  pacientes!: ListaPacientesI[];
+  medicos!: MedicoI[];
   form!: FormGroup | any;
-  usuario!: UsuarioI;
+  usuario!: UsuarioPostI;
   userData?: any;
   error?: boolean;
   answer?: string;
@@ -20,6 +24,7 @@ export class EditarUsuarioComponent implements OnInit {
   isSuccess?: boolean;
   visible: boolean = true;
   changetype: boolean = true;
+  id!: number;
 
   constructor(
     private fb: FormBuilder,
@@ -27,11 +32,14 @@ export class EditarUsuarioComponent implements OnInit {
     private router: Router,
     private usuarioService: LoginService,
     private pd: DatePipe,
+    private pacientesService: PacientesService,
+    private medicoService: MedicoService,
   ) { this.setForm() }
 
   ngOnInit(): void {
     if (localStorage.getItem('token')) {
       let pacienteId = Number(this.activeRouter.snapshot.paramMap.get('id'));
+      this.id = pacienteId;
       this.usuarioService.getId(pacienteId).subscribe(data => {
         this.usuario = data;
         this.form.setValue({
@@ -41,6 +49,21 @@ export class EditarUsuarioComponent implements OnInit {
           Contraseña: '',
           Rol: this.usuario.Rol,
         })
+
+        this.pacientesService.getAllPatients().subscribe(data => {
+          this.pacientes = data;
+        },
+          error => {
+            let message = "Error: " + error.status + " Ha ocurrio un error en el servidor al cargar los datos";
+            this.showAnswerError(message);
+          })
+        this.medicoService.getAll().subscribe(data => {
+          this.medicos = data;
+        },
+          error => {
+            let message = "Error: " + error.status + " Ha ocurrio un error en el servidor al cargar los datos";
+            this.showAnswerError(message);
+          })
       },
         error => {
           let message = "Error: " + error.status + " Ha ocurrio un error en el servidor al cargar los datos";
@@ -55,7 +78,7 @@ export class EditarUsuarioComponent implements OnInit {
   setForm() {
     this.form = this.fb.group({
       ID_Usuario: [0],
-      CorreoElectronico: ['', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$')]],
+      CorreoElectronico: ['', [Validators.required]],
       Nombre: ['', [Validators.required]],
       Contraseña: [''],
       Rol: ['', [Validators.required]],
@@ -70,7 +93,7 @@ export class EditarUsuarioComponent implements OnInit {
       this.showWarning('Ingresa los datos como se indica');
     } else {
       if (this.form.get('Contraseña').value) {
-        this.usuarioService.put(this.form.value).subscribe(data => {
+        this.usuarioService.putNP(this.form.value).subscribe(data => {
           this.showAnswer("Datos actualizados con éxito");
           setTimeout(() => { this.router.navigate(['usuarios']) }, 1000)
         },
@@ -81,17 +104,19 @@ export class EditarUsuarioComponent implements OnInit {
       } else {
         this.userData = {
           ID_Usuario: this.usuario.ID_Usuario,
-          CorreoElectronico: this.form.get('CorreoElectronico').value,
+          CorreoElectronico:this.form.get('CorreoElectronico').value,
           Nombre: this.form.get('Nombre').value,
           Rol: this.form.get('Rol').value,
         }
-        this.usuarioService.put(this.userData).subscribe(data => {
+        
+        this.usuarioService.putNP(this.userData).subscribe(data => {
           this.showAnswer("Datos actualizados con éxito");
           setTimeout(() => { this.router.navigate(['usuarios']) }, 1000)
         },
           error => {
             let message = "Error: " + error.status + " Ha ocurrio un error en el servidor al enviar los datos";
             this.showAnswerError(message);
+            console.log(error);
           })
       }
 

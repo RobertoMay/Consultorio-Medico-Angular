@@ -2,129 +2,188 @@
 
 <div class="container mt-5">
 
-    <div class="col-sm-10 mb-4">
+    <ng-container *ngIf="rol == 'super-admin'">
+        <div class="col-sm-10 mb-4">
+            <div class="row">
+                <h1>Crea una Prescripción Médica</h1>
+                <p>Ingresa los datos para crear una nueva prescripción.</p>
+            </div>
+        </div>
+    
+        <div *ngIf="isSuccess" class="alert alert-success alerta bi bi-check" role="alert">
+            {{ answer }}
+        </div>
+        <div *ngIf="error" class="alert alert-danger alerta bi bi-exclamation-triangle-fill" role="alert">
+            {{ answer }}
+        </div>
+        <div *ngIf="warning" class="alert alert-warning alerta bi bi-exclamation-triangle" role="alert">
+            {{ answer }}
+        </div>
+    
+        <form [formGroup]="form" (submit)="create()">
+            <div class="row justify-content-center">
+                <div class="col-sm-6">
+                    <div class="mb-3">
+                        <label class="form-label">Id paciente</label>
+                        <input type="number" class="form-control" formControlName="ID_Paciente" placeholder="ID Paciente"
+                            [value]="">
+                        <ng-container *ngIf="form.get('ID_Paciente').touched && form.get('ID_Paciente').errors">
+                            <div class="form-text text-danger" *ngIf="form.get('ID_Paciente').errors.required">
+                                Ingresa al paciente
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="mb-3">
+                        <label class="form-label">Id Medico</label>
+                        <input type="number" class="form-control" formControlName="ID_Medico" placeholder="Id Médico"
+                            [value]="">
+                        <ng-container *ngIf="form.get('ID_Medico').touched && form.get('ID_Medico').errors">
+                            <div class="form-text text-danger" *ngIf="form.get('ID_Medico').errors.required">
+                                Ingresa al medico
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-sm-6">
+                    <div class="mb-3">
+                        <label class="form-label">Medicamento</label>
+                        <input type="text" class="form-control" formControlName="Medicamento" placeholder="Medicamento"
+                            [value]="">
+                        <ng-container *ngIf="form.get('Medicamento').touched && form.get('Medicamento').errors">
+                            <div class="form-text text-danger" *ngIf="form.get('Medicamento').errors.required">
+                                Ingresa el Medicamento
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="mb-3">
+                        <label class="form-label">Dosis</label>
+                        <input type="text" class="form-control" formControlName="Dosis" placeholder="Dosis"
+                            [value]="">
+                        <ng-container *ngIf="form.get('Dosis').touched && form.get('Dosis').errors">
+                            <div class="form-text text-danger" *ngIf="form.get('Dosis').errors.required">
+                                Ingresa la dosis
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-sm-6">
+                    <div class="mb-3">
+                        <label class="form-label">Frecuencia</label>
+                        <input type="text" class="form-control" formControlName="Frecuencia" placeholder="Frecuencia"
+                            [value]="">
+                        <ng-container *ngIf="form.get('Frecuencia').touched && form.get('Frecuencia').errors">
+                            <div class="form-text text-danger" *ngIf="form.get('Frecuencia').errors.required">
+                                Ingresa la frecuencia
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="mb-3">
+                        <label class="form-label">Fecha de emisión</label>
+                        <input type="date" class="form-control" formControlName="FechaEmision"
+                            placeholder="Fecha de emisión" [value]="">
+                        <ng-container *ngIf="form.get('FechaEmision').touched && form.get('FechaEmision').errors">
+                            <div class="form-text text-danger" *ngIf="form.get('FechaEmision').errors.required">
+                                Ingresa la fecha de emisión
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="mb-3">
+                    </div>
+                </div>
+            </div>
+    
+            <div class="row justify-content-center py-2">
+                <div class="col-1">
+                    <button class="btn btn-warning" (click)="volver()">Volver</button>
+                </div>
+                <div class="col-1">
+                    <button class="btn btn-primary">Guardar</button>
+                </div>
+            </div>
+        </form>
+    
+        <!-- PACIENTES -->
+    
         <div class="row">
-            <h1>Crea una Prescripción Médica</h1>
-            <p>Ingresa los datos para crear una nueva prescripción.</p>
-        </div>
-    </div>
-
-    <div *ngIf="isSuccess" class="alert alert-success alerta bi bi-check" role="alert">
-        {{ answer }}
-    </div>
-    <div *ngIf="error" class="alert alert-danger alerta bi bi-exclamation-triangle-fill" role="alert">
-        {{ answer }}
-    </div>
-    <div *ngIf="warning" class="alert alert-warning alerta bi bi-exclamation-triangle" role="alert">
-        {{ answer }}
-    </div>
-
-    <form [formGroup]="form" (submit)="create()">
-        <div class="row justify-content-center">
-            <div class="col-sm-6">
-                <div class="mb-3">
-                    <label class="form-label">Id paciente</label>
-                    <input type="number" class="form-control" formControlName="ID_Paciente" placeholder="ID Paciente"
-                        [value]="">
-                    <ng-container *ngIf="form.get('ID_Paciente').touched && form.get('ID_Paciente').errors">
-                        <div class="form-text text-danger" *ngIf="form.get('ID_Paciente').errors.required">
-                            Ingresa al paciente
-                        </div>
-                    </ng-container>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="mb-3">
-                    <label class="form-label">Id Medico</label>
-                    <input type="number" class="form-control" formControlName="ID_Medico" placeholder="Id Médico"
-                        [value]="">
-                    <ng-container *ngIf="form.get('ID_Medico').touched && form.get('ID_Medico').errors">
-                        <div class="form-text text-danger" *ngIf="form.get('ID_Medico').errors.required">
-                            Ingresa al medico
-                        </div>
-                    </ng-container>
-                </div>
+            <div class="col-md-12 mt-5">
+                <h3>Lista de los pacientes</h3>
+                <button class="btn btn-info bg-theme" routerLink="/pacientes">Ver</button>
             </div>
         </div>
-        <div class="row justify-content-center">
-            <div class="col-sm-6">
-                <div class="mb-3">
-                    <label class="form-label">Medicamento</label>
-                    <input type="text" class="form-control" formControlName="Medicamento" placeholder="Medicamento"
-                        [value]="">
-                    <ng-container *ngIf="form.get('Medicamento').touched && form.get('Medicamento').errors">
-                        <div class="form-text text-danger" *ngIf="form.get('Medicamento').errors.required">
-                            Ingresa el Medicamento
-                        </div>
-                    </ng-container>
-                </div>
+        <div class="row col-5 mb-2 mt-2">
+            <div class="input-group rounded" >
+                <input type="search" class="form-control rounded" placeholder="Buscar" aria-label="Search"
+                    aria-describedby="search-addon" id="search" [(ngModel)]="searchTerm" (input)="search()"/>
+                <span class="input-group-text border-0 nb" id="search-addon">
+                    <i class="bi bi-search"></i>
+                </span>
             </div>
-            <div class="col-sm-6">
-                <div class="mb-3">
-                    <label class="form-label">Dosis</label>
-                    <input type="text" class="form-control" formControlName="Dosis" placeholder="Dosis"
-                        [value]="">
-                    <ng-container *ngIf="form.get('Dosis').touched && form.get('Dosis').errors">
-                        <div class="form-text text-danger" *ngIf="form.get('Dosis').errors.required">
-                            Ingresa la dosis
+        </div>
+    
+    
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-12 mt-4">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <table class="table row-border hover">
+                                <thead>
+                                    <tr>
+                                        <th> ID </th>
+                                        <th> Nombre </th>
+                                        <th> Apellido </th>
+                                        <th> Télefono </th>
+                                        <th> Correo </th>
+                                    </tr>
+                                </thead>
+    
+                                <tbody>
+                                    <tr *ngFor="let paciente of filteredCitasList">
+                                        <td class="col-2"> {{ paciente.ID_Paciente }} </td>
+                                        <td class="col-3"> {{paciente.Nombre}} </td>
+                                        <td class="col-2"> {{ paciente.Apellido }} </td>
+                                        <td class="col-2"> {{ paciente.Telefono }} </td>
+                                        <td class="col-3"> {{ paciente.CorreoElectronico }} </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                    </ng-container>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="row justify-content-center">
-            <div class="col-sm-6">
-                <div class="mb-3">
-                    <label class="form-label">Frecuencia</label>
-                    <input type="text" class="form-control" formControlName="Frecuencia" placeholder="Frecuencia"
-                        [value]="">
-                    <ng-container *ngIf="form.get('Frecuencia').touched && form.get('Frecuencia').errors">
-                        <div class="form-text text-danger" *ngIf="form.get('Frecuencia').errors.required">
-                            Ingresa la frecuencia
-                        </div>
-                    </ng-container>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="mb-3">
-                    <label class="form-label">Fecha de emisión</label>
-                    <input type="date" class="form-control" formControlName="FechaEmision"
-                        placeholder="Fecha de emisión" [value]="">
-                    <ng-container *ngIf="form.get('FechaEmision').touched && form.get('FechaEmision').errors">
-                        <div class="form-text text-danger" *ngIf="form.get('FechaEmision').errors.required">
-                            Ingresa la fecha de emisión
-                        </div>
-                    </ng-container>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="mb-3">
-                </div>
+    
+        <!-- MEDICOS -->
+    
+        <div class="row">
+            <div class="col-md-12 mt-5">
+                <h3>Lista de los médicos</h3>
+                <button class="btn btn-info bg-theme" routerLink="/medicos">Ver</button>
             </div>
         </div>
-
-        <div class="row justify-content-center py-2">
-            <div class="col-1">
-                <button class="btn btn-warning" (click)="volver()">Volver</button>
-            </div>
-            <div class="col-1">
-                <button class="btn btn-primary">Guardar</button>
+        <div class="row col-5 mb-2 mt-2">
+            <div class="input-group rounded" >
+                <input type="search" class="form-control rounded" placeholder="Buscar" aria-label="Search"
+                    aria-describedby="search-addon" id="search" [(ngModel)]="searchTermM" (input)="searchM()"/>
+                <span class="input-group-text border-0 nb" id="search-addon">
+                    <i class="bi bi-search"></i>
+                </span>
             </div>
         </div>
-    </form>
-
-    <!-- PACIENTES -->
-
-    <div class="row">
-        <div class="col-md-12 mt-5">
-            <h3>Lista de los pacientes</h3>
-            <button class="btn btn-info bg-theme" routerLink="/pacientes">Ver</button>
-        </div>
-    </div>
-
-
-    <div class="row">
-        <div class="col-md-12">
+    
+        <div class="row">
             <div class="col-md-12 mt-4">
                 <div class="card shadow-sm">
                     <div class="card-body">
@@ -134,66 +193,183 @@
                                     <th> ID </th>
                                     <th> Nombre </th>
                                     <th> Apellido </th>
-                                    <th> Télefono </th>
+                                    <th> Especialidad </th>
                                     <th> Correo </th>
                                 </tr>
                             </thead>
-
+    
                             <tbody>
-                                <tr *ngFor="let paciente of pacientes">
-                                    <td class="col-2"> {{ paciente.ID_Paciente }} </td>
-                                    <td class="col-3"> {{paciente.Nombre}} </td>
-                                    <td class="col-2"> {{ paciente.Apellido }} </td>
-                                    <td class="col-2"> {{ paciente.Telefono }} </td>
-                                    <td class="col-3"> {{ paciente.CorreoElectronico }} </td>
+                                <tr *ngFor="let o of filteredCitasListM">
+                                    <td class="col-2"> {{ o.ID_Medico }} </td>
+                                    <td class="col-3"> {{ o.Nombre}} </td>
+                                    <td class="col-2"> {{ o.Apellido }} </td>
+                                    <td class="col-2"> {{ o.Especialidad }} </td>
+                                    <td class="col-3"> {{ o.CorreoElectronico }} </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
+    
             </div>
         </div>
-    </div>
+    </ng-container>
 
-    <!-- MEDICOS -->
-
-    <div class="row">
-        <div class="col-md-12 mt-5">
-            <h3>Lista de los médicos</h3>
-            <button class="btn btn-info bg-theme" routerLink="/medicos">Ver</button>
+    <ng-container *ngIf="rol == 'Médico'">
+        <div class="col-sm-10 mb-4">
+            <div class="row">
+                <h1>Crea una Prescripción Médica</h1>
+                <p>Ingresa los datos para crear una nueva prescripción.</p>
+            </div>
         </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-12 mt-4">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <table class="table row-border hover">
-                        <thead>
-                            <tr>
-                                <th> ID </th>
-                                <th> Nombre </th>
-                                <th> Apellido </th>
-                                <th> Especialidad </th>
-                                <th> Correo </th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            <tr *ngFor="let o of medicos">
-                                <td class="col-2"> {{ o.ID_Medico }} </td>
-                                <td class="col-3"> {{ o.Nombre}} </td>
-                                <td class="col-2"> {{ o.Apellido }} </td>
-                                <td class="col-2"> {{ o.Especialidad }} </td>
-                                <td class="col-3"> {{ o.CorreoElectronico }} </td>
-                            </tr>
-                        </tbody>
-                    </table>
+    
+        <div *ngIf="isSuccess" class="alert alert-success alerta bi bi-check" role="alert">
+            {{ answer }}
+        </div>
+        <div *ngIf="error" class="alert alert-danger alerta bi bi-exclamation-triangle-fill" role="alert">
+            {{ answer }}
+        </div>
+        <div *ngIf="warning" class="alert alert-warning alerta bi bi-exclamation-triangle" role="alert">
+            {{ answer }}
+        </div>
+    
+        <form [formGroup]="form" (submit)="create()">
+            <div class="row justify-content-center">
+                <div class="col-sm-6">
+                    <div class="mb-3">
+                        <label class="form-label">Id paciente</label>
+                        <input type="number" class="form-control" formControlName="ID_Paciente" placeholder="ID Paciente"
+                            [value]="">
+                        <ng-container *ngIf="form.get('ID_Paciente').touched && form.get('ID_Paciente').errors">
+                            <div class="form-text text-danger" *ngIf="form.get('ID_Paciente').errors.required">
+                                Ingresa al paciente
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="mb-3">
+                        <label class="form-label">Medicamento</label>
+                        <input type="text" class="form-control" formControlName="Medicamento" placeholder="Medicamento"
+                            [value]="">
+                        <ng-container *ngIf="form.get('Medicamento').touched && form.get('Medicamento').errors">
+                            <div class="form-text text-danger" *ngIf="form.get('Medicamento').errors.required">
+                                Ingresa el Medicamento
+                            </div>
+                        </ng-container>
+                    </div>
                 </div>
             </div>
+            <div class="row justify-content-center">
+                
+                <div class="col-sm-6">
+                    <div class="mb-3">
+                        <label class="form-label">Dosis</label>
+                        <input type="text" class="form-control" formControlName="Dosis" placeholder="Dosis"
+                            [value]="">
+                        <ng-container *ngIf="form.get('Dosis').touched && form.get('Dosis').errors">
+                            <div class="form-text text-danger" *ngIf="form.get('Dosis').errors.required">
+                                Ingresa la dosis
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
 
+                <div class="col-sm-6">
+                    <div class="mb-3">
+                        <label class="form-label">Frecuencia</label>
+                        <input type="text" class="form-control" formControlName="Frecuencia" placeholder="Frecuencia"
+                            [value]="">
+                        <ng-container *ngIf="form.get('Frecuencia').touched && form.get('Frecuencia').errors">
+                            <div class="form-text text-danger" *ngIf="form.get('Frecuencia').errors.required">
+                                Ingresa la frecuencia
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+               
+                <div class="col-sm-6">
+                    <div class="mb-3">
+                        <label class="form-label">Fecha de emisión</label>
+                        <input type="date" class="form-control" formControlName="FechaEmision"
+                            placeholder="Fecha de emisión" [value]="">
+                        <ng-container *ngIf="form.get('FechaEmision').touched && form.get('FechaEmision').errors">
+                            <div class="form-text text-danger" *ngIf="form.get('FechaEmision').errors.required">
+                                Ingresa la fecha de emisión
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="mb-3">
+                    </div>
+                </div>
+            </div>
+    
+            <div class="row justify-content-center py-2">
+                <div class="col-1">
+                    <button class="btn btn-warning" (click)="volver()">Volver</button>
+                </div>
+                <div class="col-1">
+                    <button class="btn btn-primary">Guardar</button>
+                </div>
+            </div>
+        </form>
+    
+        <!-- PACIENTES -->
+    
+        <div class="row">
+            <div class="col-md-12 mt-5">
+                <h3>Lista de los pacientes</h3>
+            </div>
         </div>
-    </div>
+        <div class="row col-5 mb-2 mt-2">
+            <div class="input-group rounded" >
+                <input type="search" class="form-control rounded" placeholder="Buscar" aria-label="Search"
+                    aria-describedby="search-addon" id="search" [(ngModel)]="searchTerm" (input)="search()"/>
+                <span class="input-group-text border-0 nb" id="search-addon">
+                    <i class="bi bi-search"></i>
+                </span>
+            </div>
+        </div>
+    
+    
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-12 mt-4">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <table class="table row-border hover">
+                                <thead>
+                                    <tr>
+                                        <th> ID </th>
+                                        <th> Nombre </th>
+                                        <th> Apellido </th>
+                                        <th> Télefono </th>
+                                        <th> Correo </th>
+                                    </tr>
+                                </thead>
+    
+                                <tbody>
+                                    <tr *ngFor="let paciente of filteredCitasList">
+                                        <td class="col-2"> {{ paciente.ID_Paciente }} </td>
+                                        <td class="col-3"> {{paciente.Nombre}} </td>
+                                        <td class="col-2"> {{ paciente.Apellido }} </td>
+                                        <td class="col-2"> {{ paciente.Telefono }} </td>
+                                        <td class="col-3"> {{ paciente.CorreoElectronico }} </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+    
+    </ng-container>
 
 </div>
 

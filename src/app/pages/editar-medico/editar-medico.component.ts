@@ -17,6 +17,7 @@ export class EditarMedicoComponent implements OnInit {
   answer?: string;
   warning?: boolean;
   isSuccess?: boolean;
+  rol!: string;
 
   constructor(
     private fb: FormBuilder,
@@ -28,6 +29,10 @@ export class EditarMedicoComponent implements OnInit {
 
   ngOnInit(): void {
     if (localStorage.getItem('token')) {
+      this.rol = localStorage.getItem('rol')!;
+      if (this.rol != 'super-admin') {
+        this.router.navigate(['medicos']);
+      }
       let medicoId = Number(this.activeRouter.snapshot.paramMap.get('id'));
       this.api.getId(medicoId).subscribe(data => {
         this.medico = data;

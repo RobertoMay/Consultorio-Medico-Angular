@@ -21,6 +21,10 @@ export class EditarPrescripcionMedicaComponent implements OnInit {
   answer?: string;
   warning?: boolean;
   isSuccess?: boolean;
+  rol!: string;
+  id!: number;
+  filteredCitasList: any[] = [];
+  searchTerm: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -34,6 +38,11 @@ export class EditarPrescripcionMedicaComponent implements OnInit {
 
   ngOnInit(): void {
     if (localStorage.getItem('token')) {
+      this.rol = localStorage.getItem('rol')!;
+      this.id = Number(localStorage.getItem('id'))!;
+      if (this.rol == 'Paciente') {
+        this.router.navigate(['prescripcion-medicas']);
+      }
       let id = Number(this.activeRouter.snapshot.paramMap.get('id'));
       this.api.getId(id).subscribe(data => {
         this.prescripcionMedica = data;
@@ -54,6 +63,7 @@ export class EditarPrescripcionMedicaComponent implements OnInit {
 
       this.pacientesService.getAllPatients().subscribe(data => {
         this.pacientes = data;
+        this.filteredCitasList = this.pacientes;
       },
         error => {
           let message = "Error: " + error.status + " Ha ocurrio un error en el servidor al cargar los datos";
@@ -108,6 +118,17 @@ export class EditarPrescripcionMedicaComponent implements OnInit {
 
   volver() {
     this.router.navigate(['prescripcion-medicas'])
+  }
+
+  search() {
+    if (this.searchTerm) {
+      this.filteredCitasList = this.pacientes.filter((cita) =>
+        cita.ID_Paciente.toString().includes(this.searchTerm) ||
+        cita.Nombre.toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
+    } else {
+      this.filteredCitasList = this.pacientes; 
+    }
   }
 
   showAnswer(answer: any) {

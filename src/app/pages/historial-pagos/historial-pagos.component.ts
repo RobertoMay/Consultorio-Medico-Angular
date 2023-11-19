@@ -16,11 +16,16 @@ export class HistorialPagosComponent implements OnInit{
   answer?: string;
   warning?: boolean;
   isSuccess?: boolean;
+  idBorrar?: number;
+  rol!: string;
+  id!: number;
 
   constructor(private api: HistorialPagosService, private router: Router) { }
 
   ngOnInit(): void {
     if (localStorage.getItem('token')) {
+      this.rol = localStorage.getItem('rol')!;
+      this.id = Number(localStorage.getItem('id'))!;
       this.api.getAll().subscribe(data => {
         this.ob = data;
       },
@@ -47,15 +52,18 @@ export class HistorialPagosComponent implements OnInit{
     this.router.navigate(['nuevo-historial-pago']);
   }
 
-  delete(id: number) {
-    this.api.delete(id).subscribe(data => {
+  borrar() {
+    this.api.delete(this.idBorrar!).subscribe(data => {
       this.showAnswer("Historial de pago borrado con éxito");
     },
       error => {
         let message = "Error: " + error.status + " El historial se encuentra relacionado con otra tabla";
         this.showAnswerError(message);
       })
+  }
 
+  delete(id: number) {
+    this.idBorrar = id;
   }
 
   showAnswer(answer: any) {

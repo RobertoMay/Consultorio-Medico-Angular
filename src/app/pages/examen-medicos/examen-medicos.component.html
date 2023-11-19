@@ -6,10 +6,24 @@
         <div class="col-md-12 mt-5">
             <div class="card shadow-sm">
                 <div class="card-body text-center">
-                    <h3 class="text-theme-center">Lista de los examenes médicos</h3>
-                    <p>Desde aquí puedes manipular los examenes médicos</p>
+                    <ng-container *ngIf="rol == 'super-admin'">
+                        <h3 class="text-theme-center">Lista de los examenes médicos</h3>
+                        <p>Desde aquí puedes manipular los examenes médicos</p>
 
-                    <button class="btn btn-info bg-theme" (click)="newPatient()">Agregar un nuevo examen</button>
+                        <button class="btn btn-info bg-theme" (click)="newPatient()">Agregar un nuevo examen</button>
+                    </ng-container>
+
+                    <ng-container *ngIf="rol == 'Paciente'">
+                        <h3 class="text-theme-center">Lista de mis examenes médicos</h3>
+                        <p>Desde aquí puedes ver tus examenes médicos</p>
+                    </ng-container>
+
+                    <ng-container *ngIf="rol == 'Médico'">
+                        <h3 class="text-theme-center">Lista de los examenes médicos</h3>
+                        <p>Desde aquí puedes manipular los examenes médicos</p>
+
+                        <button class="btn btn-info bg-theme" (click)="newPatient()">Agregar un nuevo examen</button>
+                    </ng-container>
 
                 </div>
             </div>
@@ -28,35 +42,125 @@
                 <div *ngIf="warning" class="alert alert-warning alerta bi bi-exclamation-triangle" role="alert">
                     {{ answer }}
                 </div>
+
+                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+                    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Borrar examen médico</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                ¿Estas seguro que deseas borrar el examen médico?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary"
+                                    data-bs-dismiss="modal">Cancelar</button>
+                                <button type="button" class="btn btn-danger" (click)="borrar()"
+                                    data-bs-dismiss="modal">Aceptar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <ng-container *ngIf="rol == 'super-admin' or 'Médico'">
+                    <div class="row col-5 mb-2 mt-2">
+                        <div class="input-group rounded" >
+                            <input type="search" class="form-control rounded" placeholder="Buscar" aria-label="Search"
+                                aria-describedby="search-addon" id="search" [(ngModel)]="searchTerm" (input)="search()"/>
+                            <span class="input-group-text border-0 nb" id="search-addon">
+                                <i class="bi bi-search"></i>
+                            </span>
+                        </div>
+                    </div>
+                </ng-container>
+
                 <div class="card shadow-sm">
                     <div class="card-body">
                         <table class="table row-border hover">
-                            <thead>
-                                <tr>
-                                    <th> No. </th>
-                                    <th> Paciente </th>
-                                    <th> Tipo </th>
-                                    <th> Fecha</th>
-                                    <th> Resultados </th>
-                                    <th> Acciones </th>
-                                </tr>
-                            </thead>
+                            <ng-container *ngIf="rol == 'super-admin'">
+                                <thead>
+                                    <tr>
+                                        <th> No. </th>
+                                        <th> Paciente </th>
+                                        <th> Tipo </th>
+                                        <th> Fecha</th>
+                                        <th> Resultados </th>
+                                        <th> Acciones </th>
+                                    </tr>
+                                </thead>
+    
+                                <tbody>
+                                    <tr *ngFor="let o of filteredCitasList; let i = index">
+                                        <td class="col-1"> {{ i+1 }} </td>
+                                        <td class="col-2"> {{ o.paciente.Nombre}} </td>
+                                        <td class="col-2"> {{ o.TipoExamen }} </td>
+                                        <td class="col-2"> {{ o.FechaExamen | date: "dd/MM/yyy"}} </td>
+                                        <td class="col-3"> {{ o.Resultados }} </td>
+                                        <td class="col-2">
+                                            <button class="btn btn-sm btn-warning m-1 bi bi-pen"
+                                                (click)="editPatient(o.ID_Examen)"></button>
+                                            <button type="button" class="btn btn-sm btn-danger m-1 bi bi-trash"
+                                                data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                                                (click)="delete(o.ID_Examen)"></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </ng-container>
 
-                            <tbody>
-                                <tr *ngFor="let o of ob; let i = index">
-                                    <td class="col-1"> {{ i+1 }} </td>
-                                    <td class="col-2"> {{ o.paciente.Nombre}} </td>
-                                    <td class="col-2"> {{ o.TipoExamen }} </td>
-                                    <td class="col-2"> {{ o.FechaExamen | date: "dd/MM/yyy"}} </td>
-                                    <td class="col-3"> {{ o.Resultados }} </td>
-                                    <td class="col-2">
-                                        <button class="btn btn-sm btn-warning m-1 bi bi-pen"
-                                            (click)="editPatient(o.ID_Examen)"></button>
-                                        <button type="button" class="btn btn-sm btn-danger m-1 bi bi-trash"
-                                            (click)="delete(o.ID_Examen)"></button>
-                                    </td>
-                                </tr>
-                            </tbody>
+                            <ng-container *ngIf="rol == 'Paciente'">
+                                <thead>
+                                    <tr>
+                                        <th> No. </th>
+                                        <th> Paciente </th>
+                                        <th> Tipo </th>
+                                        <th> Fecha</th>
+                                        <th> Resultados </th>
+                                    </tr>
+                                </thead>
+    
+                                <tbody>
+                                    <tr *ngFor="let o of obP; let i = index">
+                                        <td class="col-2"> {{ i+1 }} </td>
+                                        <td class="col-2"> {{ o.paciente.Nombre}} </td>
+                                        <td class="col-3"> {{ o.TipoExamen }} </td>
+                                        <td class="col-2"> {{ o.FechaExamen | date: "dd/MM/yyy"}} </td>
+                                        <td class="col-3"> {{ o.Resultados }} </td>
+                                    </tr>
+                                </tbody>
+                            </ng-container>
+
+                            <ng-container *ngIf="rol == 'Médico'">
+                                <thead>
+                                    <tr>
+                                        <th> No. </th>
+                                        <th> Paciente </th>
+                                        <th> Tipo </th>
+                                        <th> Fecha</th>
+                                        <th> Resultados </th>
+                                        <th> Acciones </th>
+                                    </tr>
+                                </thead>
+    
+                                <tbody>
+                                    <tr *ngFor="let o of filteredCitasList; let i = index">
+                                        <td class="col-1"> {{ i+1 }} </td>
+                                        <td class="col-2"> {{ o.paciente.Nombre}} </td>
+                                        <td class="col-2"> {{ o.TipoExamen }} </td>
+                                        <td class="col-2"> {{ o.FechaExamen | date: "dd/MM/yyy"}} </td>
+                                        <td class="col-3"> {{ o.Resultados }} </td>
+                                        <td class="col-2">
+                                            <button class="btn btn-sm btn-warning m-1 bi bi-pen"
+                                                (click)="editPatient(o.ID_Examen)"></button>
+                                            <button type="button" class="btn btn-sm btn-danger m-1 bi bi-trash"
+                                                data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                                                (click)="delete(o.ID_Examen)"></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </ng-container>
                         </table>
                     </div>
                 </div>

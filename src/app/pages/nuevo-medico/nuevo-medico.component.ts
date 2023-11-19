@@ -14,11 +14,16 @@ export class NuevoMedicoComponent implements OnInit {
   warning?: boolean;
   isSuccess?: boolean;
   form: FormGroup | any;
+  rol!: string;
 
   constructor(private fb: FormBuilder, private api: MedicoService, private router: Router) { }
 
   ngOnInit(): void {
     if (localStorage.getItem('token')) {
+      this.rol = localStorage.getItem('rol')!;
+      if (this.rol != 'super-admin') {
+        this.router.navigate(['medicos']);
+      }
       this.setForm();
     } else {
       this.router.navigate(['login'])

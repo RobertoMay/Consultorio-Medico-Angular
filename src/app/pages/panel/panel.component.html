@@ -1,127 +1,277 @@
 <app-header></app-header>
 
+<div class="header_section">
+    <div id="main_slider" class="container">
+        <div class="container col-10 hg">
+            <div class="banner_section">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h1 class="banner_taital">Consultorio <br><span style="color: #151515;">Médico</span></h1>
+                            <!-- <p class="banner_text">Ve y manipula todo desde aquí</p> -->
+                            <ng-container>
+                                <div class="btn_main" *ngIf="rol == 'super-admin'">
+                                    <div class="more_bt"><a routerLink="/pacientes">Ver pacientes</a></div>
+                                    <div class="contact_bt"><a routerLink="/medicos">Ver médicos</a></div>
+                                </div>
+                                <div class="btn_main" *ngIf="rol == 'Paciente'">
+                                    <div class="more_bt"><a routerLink="/citas">Ver mis citas</a></div>
+                                    <div class="contact_bt"><a routerLink="/historial-medicos">Ver mi historial</a></div>
+                                </div>
+                                <div class="btn_main" *ngIf="rol == 'Médico'">
+                                    <div class="more_bt"><a routerLink="/citas">Ver citas</a></div>
+                                    <div class="contact_bt"><a routerLink="/horarios-medicos">Ver mi horario</a></div>
+                                </div>
+                            </ng-container>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="image_1"><img src="../../../assets/img-1.png"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <div class="container mb-1">
 
-    <div class="row">
-        <div class="col-md-4 mt-5">
-            <div class="card shadow-sm">
-                <div class="card-body text-center">
-                    <h3 class="text-theme-center">Pacientes</h3>
-                    <p>Manipular y ver a los pacientes</p>
-                    <button class="btn btn-info bg-theme" routerLink="/pacientes">Ver</button>
+    <ng-container *ngIf="rol == 'super-admin'">
+        <div class="row">
+            <div class="col-md-4 mt-5">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <h3 class="text-theme-center">Pacientes</h3>
+                        <p>Manipular y ver a los pacientes</p>
+                        <button class="btn btn-info bg-theme" routerLink="/pacientes">Ver</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mt-5">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <h3 class="text-theme-center">Médicos</h3>
+                        <p>Manipular y ver a los médicos</p>
+                        <button class="btn btn-info bg-theme" routerLink="/medicos">Ver</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mt-5">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <h3 class="text-theme-center">Citas</h3>
+                        <p>Manipular y ver a las citas</p>
+                        <button class="btn btn-info bg-theme" routerLink="/citas">Ver</button>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-4 mt-5">
-            <div class="card shadow-sm">
-                <div class="card-body text-center">
-                    <h3 class="text-theme-center">Médicos</h3>
-                    <p>Manipular y ver a los médicos</p>
-                    <button class="btn btn-info bg-theme" routerLink="/medicos">Ver</button>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 mt-5">
-            <div class="card shadow-sm">
-                <div class="card-body text-center">
-                    <h3 class="text-theme-center">Citas</h3>
-                    <p>Manipular y ver a las citas</p>
-                    <button class="btn btn-info bg-theme" routerLink="/citas">Ver</button>
-                </div>
-            </div>
-        </div>
-    </div>
     
-    <div class="row">
-        <div class="col-md-4 mt-5">
-            <div class="card shadow-sm">
-                <div class="card-body text-center">
-                    <h3 class="text-theme-center">Historial médico</h3>
-                    <p>Manipular y ver los historiales médicos</p>
-                    <button class="btn btn-info bg-theme" routerLink="/historial-medicos">Ver</button>
+        <div class="row">
+            <div class="col-md-4 mt-5">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <h3 class="text-theme-center">Historial médico</h3>
+                        <p>Manipular y ver los historiales médicos</p>
+                        <button class="btn btn-info bg-theme" routerLink="/historial-medicos">Ver</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mt-5">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <h3 class="text-theme-center">Prescripción Médica</h3>
+                        <p>Manipular y ver a las prescripciones médicas</p>
+                        <button class="btn btn-info bg-theme" routerLink="/prescripcion-medicas">Ver</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mt-5">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <h3 class="text-theme-center">Examen Médico</h3>
+                        <p>Manipular y ver los examenes médicos</p>
+                        <button class="btn btn-info bg-theme" routerLink="/examen-medicos">Ver</button>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-4 mt-5">
-            <div class="card shadow-sm">
-                <div class="card-body text-center">
-                    <h3 class="text-theme-center">Prescripción Médica</h3>
-                    <p>Manipular y ver a las prescripciones médicas</p>
-                    <button class="btn btn-info bg-theme" routerLink="/prescripcion-medicas">Ver</button>
+    
+        <div class="row">
+            <div class="col-md-4 mt-5">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <h3 class="text-theme-center">Factura</h3>
+                        <p>Manipular y ver las facturas</p>
+                        <button class="btn btn-info bg-theme" routerLink="/facturas">Ver</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mt-5">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <h3 class="text-theme-center">Historial Pagos</h3>
+                        <p>Manipular y ver el historial de pagos</p>
+                        <button class="btn btn-info bg-theme" routerLink="/historial-pagos">Ver</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mt-5">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <h3 class="text-theme-center">Personal del consultorio</h3>
+                        <p>Manipular y ver al personal del consultorio</p>
+                        <button class="btn btn-info bg-theme" routerLink="/personal">Ver</button>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-4 mt-5">
-            <div class="card shadow-sm">
-                <div class="card-body text-center">
-                    <h3 class="text-theme-center">Examen Médico</h3>
-                    <p>Manipular y ver los examenes médicos</p>
-                    <button class="btn btn-info bg-theme" routerLink="/examen-medicos">Ver</button>
+    
+        <div class="row justify-content-center">
+            <div class="col-md-4 mt-5 ">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <h3 class="text-theme-center">Horario de los médicos</h3>
+                        <p>Manipular y ver los horarios de los médicos</p>
+                        <button class="btn btn-info bg-theme" routerLink="/horarios-medicos">Ver</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </ng-container>
 
-    <div class="row">
-        <div class="col-md-4 mt-5">
-            <div class="card shadow-sm">
-                <div class="card-body text-center">
-                    <h3 class="text-theme-center">Factura</h3>
-                    <p>Manipular y ver las facturas</p>
-                    <button class="btn btn-info bg-theme" routerLink="/facturas">Ver</button>
+    <ng-container *ngIf="rol == 'Paciente'">
+        <div class="row">
+            <div class="col-md-4 mt-5">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <h3 class="text-theme-center">Médicos</h3>
+                        <p>Ver a los médicos</p>
+                        <button class="btn btn-info bg-theme" routerLink="/medicos">Ver</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mt-5">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <h3 class="text-theme-center">Citas</h3>
+                        <p>Crear y ver citas</p>
+                        <button class="btn btn-info bg-theme" routerLink="/citas">Ver</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mt-5">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <h3 class="text-theme-center">Historial médico</h3>
+                        <p>Ver mi historial médico</p>
+                        <button class="btn btn-info bg-theme" routerLink="/historial-medicos">Ver</button>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-4 mt-5">
-            <div class="card shadow-sm">
-                <div class="card-body text-center">
-                    <h3 class="text-theme-center">Historial Pagos</h3>
-                    <p>Manipular y ver el historial de pagos</p>
-                    <button class="btn btn-info bg-theme" routerLink="/historial-pagos">Ver</button>
+    
+        <div class="row">
+            
+            <div class="col-md-4 mt-5">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <h3 class="text-theme-center">Prescripción Médica</h3>
+                        <p>Ver mi prescripción médicas</p>
+                        <button class="btn btn-info bg-theme" routerLink="/prescripcion-medicas">Ver</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mt-5">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <h3 class="text-theme-center">Examen Médico</h3>
+                        <p>Ver mis examenes médicos</p>
+                        <button class="btn btn-info bg-theme" routerLink="/examen-medicos">Ver</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mt-5">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <h3 class="text-theme-center">Factura</h3>
+                        <p>Ver mis facturas</p>
+                        <button class="btn btn-info bg-theme" routerLink="/facturas">Ver</button>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-4 mt-5">
-            <div class="card shadow-sm">
-                <div class="card-body text-center">
-                    <h3 class="text-theme-center">Personal del consultorio</h3>
-                    <p>Manipular y ver al personal del consultorio</p>
-                    <button class="btn btn-info bg-theme" routerLink="/personal">Ver</button>
+    
+        <div class="row justify-content-center">
+            <div class="col-md-4 mt-5 ">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <h3 class="text-theme-center">Horario de los médicos</h3>
+                        <p>Ver los horarios de los médicos</p>
+                        <button class="btn btn-info bg-theme" routerLink="/horarios-medicos">Ver</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-   
-    <div class="row">
-        <div class="col-md-4 mt-5">
-            <div class="card shadow-sm">
-                <div class="card-body text-center">
-                    <h3 class="text-theme-center">Horario de los médicos</h3>
-                    <p>Manipular y ver los horarios de los médicos</p>
-                    <button class="btn btn-info bg-theme" routerLink="/horarios-medicos">Ver</button>
+    </ng-container>
+
+    <ng-container *ngIf="rol == 'Médico'">
+        <div class="row">
+            <div class="col-md-4 mt-5">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <h3 class="text-theme-center">Citas</h3>
+                        <p>Manipular y ver a las citas</p>
+                        <button class="btn btn-info bg-theme" routerLink="/citas">Ver</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mt-5">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <h3 class="text-theme-center">Historial médico</h3>
+                        <p>Manipular y ver los historiales médicos</p>
+                        <button class="btn btn-info bg-theme" routerLink="/historial-medicos">Ver</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mt-5">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <h3 class="text-theme-center">Prescripción Médica</h3>
+                        <p>Manipular y ver a las prescripciones médicas</p>
+                        <button class="btn btn-info bg-theme" routerLink="/prescripcion-medicas">Ver</button>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-4 mt-5">
-            <div class="card shadow-sm">
-                <div class="card-body text-center">
-                    <h3 class="text-theme-center">Historial Pagos</h3>
-                    <p>Manipular y ver el historial de pagos</p>
-                    <button class="btn btn-info bg-theme" routerLink="/historial-pagos">Ver</button>
+    
+        <div class="row justify-content-center">
+            <div class="col-md-4 mt-5">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <h3 class="text-theme-center">Examen Médico</h3>
+                        <p>Manipular y ver los examenes médicos</p>
+                        <button class="btn btn-info bg-theme" routerLink="/examen-medicos">Ver</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mt-5 ">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <h3 class="text-theme-center">Mi horario</h3>
+                        <p>Manipular y ver mis horarios</p>
+                        <button class="btn btn-info bg-theme" routerLink="/horarios-medicos">Ver</button>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-4 mt-5">
-            <div class="card shadow-sm">
-                <div class="card-body text-center">
-                    <h3 class="text-theme-center">Personal del consultorio</h3>
-                    <p>Manipular y ver al personal del consultorio</p>
-                    <button class="btn btn-info bg-theme" routerLink="/personal">Ver</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    
+    </ng-container>
 
 </div>
+
 <br><br>
 <app-footer></app-footer>

@@ -17,6 +17,8 @@ export class EditarComponent implements OnInit {
   answer?: string;
   warning?: boolean;
   isSuccess?: boolean;
+  rol!: string;
+  id!: number;
 
   constructor(
     private fb: FormBuilder,
@@ -28,6 +30,11 @@ export class EditarComponent implements OnInit {
 
   ngOnInit(): void {
     if (localStorage.getItem('token')) {
+      this.rol = localStorage.getItem('rol')!;
+      this.id = Number(localStorage.getItem('id'))!;
+      if (this.rol != 'super-admin') {
+        this.router.navigate(['pacientes']);
+      }
       let pacienteId = Number(this.activeRouter.snapshot.paramMap.get('id'));
       this.pacienteService.getPatient(pacienteId).subscribe(data => {
         this.paciente = data;
@@ -75,7 +82,7 @@ export class EditarComponent implements OnInit {
     } else {
       this.pacienteService.putPatient(this.form.value).subscribe(data => {
         this.showAnswer("Datos actualizados con éxito");
-        setTimeout(() => { this.router.navigate(['dashboard']) }, 1000)
+        setTimeout(() => { this.router.navigate(['pacientes']) }, 1000)
       },
         error => {
           let message = "Error: " + error.status + " Ha ocurrio un error en el servidor al enviar los datos";

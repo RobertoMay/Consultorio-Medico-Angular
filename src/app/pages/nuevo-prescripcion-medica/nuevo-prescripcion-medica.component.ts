@@ -19,6 +19,12 @@ export class NuevoPrescripcionMedicaComponent implements OnInit {
   warning?: boolean;
   isSuccess?: boolean;
   form: FormGroup | any;
+  rol!: string;
+  id!: number;
+  filteredCitasList: any[] = [];
+  searchTerm: string = '';
+  filteredCitasListM: any[] = [];
+  searchTermM: string = '';
 
   constructor(
     private fb: FormBuilder, 
@@ -30,9 +36,15 @@ export class NuevoPrescripcionMedicaComponent implements OnInit {
 
   ngOnInit(): void {
     if (localStorage.getItem('token')) {
+      this.rol = localStorage.getItem('rol')!;
+      this.id = Number(localStorage.getItem('id'))!;
+      if (this.rol == 'Paciente') {
+        this.router.navigate(['prescripcion-medicas']);
+      }
       this.setForm();
       this.pacientesService.getAllPatients().subscribe(data => {
         this.pacientes = data;
+        this.filteredCitasList = this.pacientes;
       },
         error => {
           let message = "Error: " + error.status + " Ha ocurrio un error en el servidor al cargar los datos";
@@ -40,6 +52,7 @@ export class NuevoPrescripcionMedicaComponent implements OnInit {
         })
       this.medicoService.getAll().subscribe(data => {
         this.medicos = data;
+        this.filteredCitasListM = this.medicos;
       },
         error => {
           let message = "Error: " + error.status + " Ha ocurrio un error en el servidor al cargar los datos";
@@ -52,14 +65,26 @@ export class NuevoPrescripcionMedicaComponent implements OnInit {
 
 
   setForm() {
-    this.form = this.fb.group({
-      ID_Paciente: ['', [Validators.required]],
-      ID_Medico: ['', [Validators.required]],
-      Medicamento: ['', [Validators.required]],
-      Dosis: ['', [Validators.required]],
-      Frecuencia: ['', [Validators.required]],
-      FechaEmision: ['', [Validators.required]],
-    })
+    if (this.rol == 'super-admin') {
+      this.form = this.fb.group({
+        ID_Paciente: ['', [Validators.required]],
+        ID_Medico: ['', [Validators.required]],
+        Medicamento: ['', [Validators.required]],
+        Dosis: ['', [Validators.required]],
+        Frecuencia: ['', [Validators.required]],
+        FechaEmision: ['', [Validators.required]],
+      })
+    }else if (this.rol == 'Médico') {
+      this.form = this.fb.group({
+        ID_Paciente: ['', [Validators.required]],
+        ID_Medico: [this.id, [Validators.required]],
+        Medicamento: ['', [Validators.required]],
+        Dosis: ['', [Validators.required]],
+        Frecuencia: ['', [Validators.required]],
+        FechaEmision: ['', [Validators.required]],
+      })
+    }
+    
   }
 
   create() {
@@ -85,6 +110,29 @@ export class NuevoPrescripcionMedicaComponent implements OnInit {
   volver() {
     this.router.navigate(['prescripcion-medicas'])
   }
+
+  search() {
+    if (this.searchTerm) {
+      this.filteredCitasList = this.pacientes.filter((cita) =>
+        cita.ID_Paciente.toString().includes(this.searchTerm) ||
+        cita.Nombre.toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
+    } else {
+      this.filteredCitasList = this.pacientes; 
+    }
+  }
+
+  searchM() {
+    if (this.searchTermM) {
+      this.filteredCitasListM = this.medicos.filter((cita) =>
+        cita.ID_Medico.toString().includes(this.searchTermM) ||
+        cita.Nombre.toLowerCase().includes(this.searchTermM.toLowerCase())
+      );
+    } else {
+      this.filteredCitasListM = this.medicos; 
+    }
+  }
+
 
   showAnswer(answer: any) {
     this.isSuccess = true;

@@ -11,18 +11,35 @@ import { Subscription } from 'rxjs';
 })
 export class HistorialMedicosComponent implements OnInit {
   historialMedico!: HistorialMedicoI[];
+  historialMedicoP: HistorialMedicoI[] = [];
+  historialMedicoM: HistorialMedicoI[] = [];
   suscription!: Subscription;
   error?: boolean;
   answer?: string;
   warning?: boolean;
   isSuccess?: boolean;
+  idBorrar?: number;
+  rol!: string;
+  id!: number;
+  filteredCitasList: any[] = [];
+  searchTerm: string = '';
 
   constructor(private api: HistorialMedicoService, private router: Router) { }
 
   ngOnInit(): void {
     if (localStorage.getItem('token')) {
+      this.rol = localStorage.getItem('rol')!;
+      this.id = Number(localStorage.getItem('id'))!;
       this.api.getAll().subscribe(data => {
         this.historialMedico = data;
+        console.log(this.historialMedico);
+        
+        for (let index = 0; index < this.historialMedico.length; index++) {
+          if (this.id == this.historialMedico[index].paciente.ID_Paciente) {
+            this.historialMedicoP.push(this.historialMedico[index]);
+          }
+        }
+        this.filteredCitasList = this.historialMedico;
       },
         error => {
           let message = "Error: " + error.status + " Ha ocurrio un error en el servidor al cargar los datos";
@@ -32,6 +49,7 @@ export class HistorialMedicosComponent implements OnInit {
       this.suscription = this.api.refresh$.subscribe(() => {
         this.api.getAll().subscribe(data => {
           this.historialMedico = data;
+          this.filteredCitasList = data;
         })
       })
     } else {
@@ -47,15 +65,29 @@ export class HistorialMedicosComponent implements OnInit {
     this.router.navigate(['nuevo-historial-medico']);
   }
 
-  delete(id: number) {
-    this.api.delete(id).subscribe(data => {
+  borrar() {
+    this.api.delete(this.idBorrar!).subscribe(data => {
       this.showAnswer("Historial borradoa con éxito");
     },
       error => {
         let message = "Error: " + error.status + " Historial se encuentra relacionado con otra tabla";
         this.showAnswerError(message);
       })
+  }
 
+  delete(id: number) {
+    this.idBorrar = id;
+  }
+
+  search() {
+    if (this.searchTerm) {
+      this.filteredCitasList = this.historialMedico.filter((cita) =>
+        cita.paciente.ID_Paciente.toString().includes(this.searchTerm) ||
+        cita.paciente.Nombre.toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
+    } else {
+      this.filteredCitasList = this.historialMedico; // Restauramos la lista completa si el término de búsqueda está vacío
+    }
   }
 
   showAnswer(answer: any) {

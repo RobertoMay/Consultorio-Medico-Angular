@@ -23,19 +23,28 @@
         <div class="row justify-content-center">
             <div class="col-sm-6">
                 <div class="mb-3">
-                    <label class="form-label">Nombre</label>
-                    <input type="text" class="form-control" formControlName="Nombre" placeholder="Nombre" [value]="">
-                    <ng-container *ngIf="form.get('Nombre').touched && form.get('Nombre').errors">
-                        <div class="form-text text-danger" *ngIf="form.get('Nombre').errors.required">
-                            Ingresa el nombre
-                        </div>
-                    </ng-container>
+                    <label class="form-label">Id paciente</label>
+                    <input type="number" class="form-control" formControlName="ID_Paciente" placeholder="ID Paciente"
+                        [value]="">
                 </div>
             </div>
             <div class="col-sm-6">
                 <div class="mb-3">
+                    <label class="form-label">Id Médico</label>
+                    <input type="number" class="form-control" formControlName="ID_Medico" placeholder="Id Médico"
+                        [value]="">
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-sm-6">
+                <div class="mb-3">
                     <label class="form-label">Rol</label>
-                    <input type="text" class="form-control" formControlName="Rol" placeholder="Rol" [value]="">
+                    <select class="form-select" formControlName="Rol">
+                        <option value="" selected>Selecciona Rol</option>
+                        <option value="Paciente">Paciente</option>
+                        <option value="Médico">Médico</option>
+                    </select>
                     <ng-container *ngIf="form.get('Rol').touched && form.get('Rol').errors">
                         <div class="form-text text-danger" *ngIf="form.get('Rol').errors.required">
                             Ingresa el rol
@@ -43,24 +52,7 @@
                     </ng-container>
                 </div>
             </div>
-        </div>
-        <div class="row justify-content-center">
-            <div class="col-sm-6">
-                <div class="mb-3">
-                    <label class="form-label">Correo electrónico</label>
-                    <div class="div input-group">
-                        <span class="input-group-text" id="inputGroupPretend">@</span>
-                        <input type="text" class="form-control" formControlName="CorreoElectronico"
-                            placeholder="Correo electrónico" [value]="">
 
-                    </div>
-                    <ng-container *ngIf="form.get('CorreoElectronico').touched && form.get('CorreoElectronico').invalid">
-                        <div class="form-text text-danger" *ngIf="form.get('CorreoElectronico').invalid">
-                            Ingrese un correo valido
-                        </div>
-                    </ng-container>
-                </div>
-            </div>
             <div class="col-sm-6">
                 <div class="mb-3">
                     <label class="form-label">Contraseña</label>
@@ -79,7 +71,7 @@
                 </div>
             </div>
         </div>
-        
+
 
         <div class="row justify-content-center py-2">
             <div class="col-1">
@@ -90,6 +82,109 @@
             </div>
         </div>
     </form>
+
+
+    <!-- PACIENTES -->
+
+    <div class="row">
+        <div class="col-md-12 mt-5">
+            <h3>Lista de los pacientes</h3>
+            <button class="btn btn-info bg-theme" routerLink="/pacientes">Ver</button>
+        </div>
+    </div>
+    <div class="row col-5 mb-2 mt-2">
+        <div class="input-group rounded" >
+            <input type="search" class="form-control rounded" placeholder="Buscar" aria-label="Search"
+                aria-describedby="search-addon" id="search" [(ngModel)]="searchTerm" (input)="search()"/>
+            <span class="input-group-text border-0 nb" id="search-addon">
+                <i class="bi bi-search"></i>
+            </span>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-12 mt-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <table class="table row-border hover">
+                            <thead>
+                                <tr>
+                                    <th> ID </th>
+                                    <th> Nombre </th>
+                                    <th> Apellido </th>
+                                    <th> Télefono </th>
+                                    <th> Correo </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr *ngFor="let paciente of filteredCitasList">
+                                    <td class="col-2"> {{ paciente.ID_Paciente }} </td>
+                                    <td class="col-3"> {{paciente.Nombre}} </td>
+                                    <td class="col-2"> {{ paciente.Apellido }} </td>
+                                    <td class="col-2"> {{ paciente.Telefono }} </td>
+                                    <td class="col-3"> {{ paciente.CorreoElectronico }} </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MEDICOS -->
+
+    <div class="row">
+        <div class="col-md-12 mt-5">
+            <h3>Lista de los médicos</h3>
+            <button class="btn btn-info bg-theme" routerLink="/medicos">Ver</button>
+        </div>
+    </div>
+    <div class="row col-5 mb-2 mt-2">
+        <div class="input-group rounded" >
+            <input type="search" class="form-control rounded" placeholder="Buscar" aria-label="Search"
+                aria-describedby="search-addon" id="search" [(ngModel)]="searchTermM" (input)="searchM()"/>
+            <span class="input-group-text border-0 nb" id="search-addon">
+                <i class="bi bi-search"></i>
+            </span>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 mt-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <table class="table row-border hover">
+                        <thead>
+                            <tr>
+                                <th> ID </th>
+                                <th> Nombre </th>
+                                <th> Apellido </th>
+                                <th> Especialidad </th>
+                                <th> Correo </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr *ngFor="let o of filteredCitasListM">
+                                <td class="col-2"> {{ o.ID_Medico }} </td>
+                                <td class="col-3"> {{ o.Nombre}} </td>
+                                <td class="col-2"> {{ o.Apellido }} </td>
+                                <td class="col-2"> {{ o.Especialidad }} </td>
+                                <td class="col-3"> {{ o.CorreoElectronico }} </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
 </div>
 
+<br><br>
 <app-footer></app-footer>

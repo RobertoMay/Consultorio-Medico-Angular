@@ -2,67 +2,279 @@
 
 <div class="container mb-1">
 
-    <div class="row">
-        <div class="col-md-12 mt-5">
-            <div class="card shadow-sm">
-                <div class="card-body text-center">
-                    <h3 class="text-theme-center">Lista del historial médico</h3>
-                    <p>Desde aquí puedes manipular el historial médico</p>
-
-                    <button class="btn btn-info bg-theme" (click)="newPatient()">Agregar un nuevo historial</button>
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-12 mt-5">
+    <ng-container *ngIf="rol == 'super-admin'">
+        <div class="row">
             <div class="col-md-12 mt-5">
-                <div *ngIf="isSuccess" class="alert alert-success alerta bi bi-check" role="alert">
-                    {{ answer }}
-                </div>
-                <div *ngIf="error" class="alert alert-danger alerta bi bi-exclamation-triangle-fill" role="alert">
-                    {{ answer }}
-                </div>
-                <div *ngIf="warning" class="alert alert-warning alerta bi bi-exclamation-triangle" role="alert">
-                    {{ answer }}
-                </div>
                 <div class="card shadow-sm">
-                    <div class="card-body">
-                        <table class="table row-border hover">
-                            <thead>
-                                <tr>
-                                    <th> No. </th>
-                                    <th> Paciente </th>
-                                    <th> Fecha de registro</th>
-                                    <th> Diagnóstico </th>
-                                    <th> Tratamiento </th>
-                                    <th> Acciones </th>
-                                </tr>
-                            </thead>
+                    <div class="card-body text-center">
+                        <h3 class="text-theme-center">Lista del historial médico</h3>
+                        <p>Desde aquí puedes manipular el historial médico</p>
 
-                            <tbody>
-                                <tr *ngFor="let o of historialMedico; let i = index">
-                                    <td class="col-1"> {{ i+1 }} </td>
-                                    <td class="col-2"> {{ o.paciente.Nombre}} </td>
-                                    <td class="col-2"> {{ o.FechaRegistro | date: "dd/MM/yyy"}} </td>
-                                    <td class="col-2"> {{ o.Diagnostico }} </td>
-                                    <td class="col-3"> {{ o.Tratamiento }} </td>
-                                    <td class="col-2">
-                                        <button class="btn btn-sm btn-warning m-1 bi bi-pen"
-                                            (click)="editPatient(o.ID_Historial)"></button>
-                                        <button type="button" class="btn btn-sm btn-danger m-1 bi bi-trash"
-                                            (click)="delete(o.ID_Historial)"></button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <button class="btn btn-info bg-theme" (click)="newPatient()">Agregar un nuevo historial</button>
+
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+
+        <div class="row">
+            <div class="col-md-12 mt-5">
+                <div class="col-md-12 mt-5">
+                    <div *ngIf="isSuccess" class="alert alert-success alerta bi bi-check" role="alert">
+                        {{ answer }}
+                    </div>
+                    <div *ngIf="error" class="alert alert-danger alerta bi bi-exclamation-triangle-fill" role="alert">
+                        {{ answer }}
+                    </div>
+                    <div *ngIf="warning" class="alert alert-warning alerta bi bi-exclamation-triangle" role="alert">
+                        {{ answer }}
+                    </div>
+
+                    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+                        tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Borrar historial</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    ¿Estas seguro que deseas borrar el historial médico?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="button" class="btn btn-danger" (click)="borrar()"
+                                        data-bs-dismiss="modal">Aceptar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row col-5 mb-4">
+                        <div class="input-group rounded" >
+                            <input type="search" class="form-control rounded" placeholder="Buscar" aria-label="Search"
+                                aria-describedby="search-addon" id="search" [(ngModel)]="searchTerm" (input)="search()"/>
+                            <span class="input-group-text border-0 nb" id="search-addon">
+                                <i class="bi bi-search"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <table class="table row-border hover">
+                                <thead>
+                                    <tr>
+                                        <th> No. </th>
+                                        <th> Paciente </th>
+                                        <th> Fecha de registro</th>
+                                        <th> Diagnóstico </th>
+                                        <th> Tratamiento </th>
+                                        <th> Acciones </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr *ngFor="let o of filteredCitasList; let i = index">
+                                        <td class="col-1"> {{ i+1 }} </td>
+                                        <td class="col-2"> {{ o.paciente.Nombre}} </td>
+                                        <td class="col-2"> {{ o.FechaRegistro | date: "dd/MM/yyy"}} </td>
+                                        <td class="col-2"> {{ o.Diagnostico }} </td>
+                                        <td class="col-3"> {{ o.Tratamiento }} </td>
+                                        <td class="col-2">
+                                            <button class="btn btn-sm btn-warning m-1 bi bi-pen"
+                                                (click)="editPatient(o.ID_Historial)"></button>
+                                            <button type="button" class="btn btn-sm btn-danger m-1 bi bi-trash"
+                                                data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                                                (click)="delete(o.ID_Historial)"></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="rol == 'Paciente'">
+        <div class="row">
+            <div class="col-md-12 mt-5">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <h3 class="text-theme-center">Lista del historial médico</h3>
+                        <p>Desde aquí puedes ver tu historial médico</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 mt-5">
+                <div class="col-md-12 mt-5">
+                    <div *ngIf="isSuccess" class="alert alert-success alerta bi bi-check" role="alert">
+                        {{ answer }}
+                    </div>
+                    <div *ngIf="error" class="alert alert-danger alerta bi bi-exclamation-triangle-fill" role="alert">
+                        {{ answer }}
+                    </div>
+                    <div *ngIf="warning" class="alert alert-warning alerta bi bi-exclamation-triangle" role="alert">
+                        {{ answer }}
+                    </div>
+
+                    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+                        tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Borrar historial</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    ¿Estas seguro que deseas borrar el historial médico?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="button" class="btn btn-danger" (click)="borrar()"
+                                        data-bs-dismiss="modal">Aceptar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <table class="table row-border hover">
+                                <thead>
+                                    <tr>
+                                        <th> No. </th>
+                                        <th> Paciente </th>
+                                        <th> Fecha de registro</th>
+                                        <th> Diagnóstico </th>
+                                        <th> Tratamiento </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr *ngFor="let o of historialMedicoP; let i = index">
+                                        <td class="col-2"> {{ i+1 }} </td>
+                                        <td class="col-2"> {{ o.paciente.Nombre}} </td>
+                                        <td class="col-2"> {{ o.FechaRegistro | date: "dd/MM/yyy"}} </td>
+                                        <td class="col-3"> {{ o.Diagnostico }} </td>
+                                        <td class="col-3"> {{ o.Tratamiento }} </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="rol == 'Médico'">
+        <div class="row">
+            <div class="col-md-12 mt-5">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <h3 class="text-theme-center">Lista del historial médico</h3>
+                        <p>Desde aquí puedes manipular el historial médico</p>
+
+                        <button class="btn btn-info bg-theme" (click)="newPatient()">Agregar un nuevo historial</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 mt-5">
+                <div class="col-md-12 mt-5">
+                    <div *ngIf="isSuccess" class="alert alert-success alerta bi bi-check" role="alert">
+                        {{ answer }}
+                    </div>
+                    <div *ngIf="error" class="alert alert-danger alerta bi bi-exclamation-triangle-fill" role="alert">
+                        {{ answer }}
+                    </div>
+                    <div *ngIf="warning" class="alert alert-warning alerta bi bi-exclamation-triangle" role="alert">
+                        {{ answer }}
+                    </div>
+
+                    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+                        tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Borrar historial</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    ¿Estas seguro que deseas borrar el historial médico?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="button" class="btn btn-danger" (click)="borrar()"
+                                        data-bs-dismiss="modal">Aceptar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row col-5 mb-4">
+                        <div class="input-group rounded" >
+                            <input type="search" class="form-control rounded" placeholder="Buscar" aria-label="Search"
+                                aria-describedby="search-addon" id="search" [(ngModel)]="searchTerm" (input)="search()"/>
+                            <span class="input-group-text border-0 nb" id="search-addon">
+                                <i class="bi bi-search"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <table class="table row-border hover">
+                                <thead>
+                                    <tr>
+                                        <th> No. </th>
+                                        <th> Paciente </th>
+                                        <th> Fecha de registro</th>
+                                        <th> Diagnóstico </th>
+                                        <th> Tratamiento </th>
+                                        <th> Acciones </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr *ngFor="let o of filteredCitasList; let i = index">
+                                        <td class="col-1"> {{ i+1 }} </td>
+                                        <td class="col-2"> {{ o.paciente.Nombre}} </td>
+                                        <td class="col-2"> {{ o.FechaRegistro | date: "dd/MM/yyy"}} </td>
+                                        <td class="col-2"> {{ o.Diagnostico }} </td>
+                                        <td class="col-3"> {{ o.Tratamiento }} </td>
+                                        <td class="col-2">
+                                            <button class="btn btn-sm btn-warning m-1 bi bi-pen"
+                                                (click)="editPatient(o.ID_Historial)"></button>
+                                            <button type="button" class="btn btn-sm btn-danger m-1 bi bi-trash"
+                                                data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                                                (click)="delete(o.ID_Historial)"></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+
 </div>
 
 <br><br>

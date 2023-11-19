@@ -44,24 +44,32 @@ export class LoginComponent implements OnInit {
       this.loginService.login(form).subscribe(data => {
         let dataResponse: ResponseI = data;
         localStorage.setItem("token", dataResponse.data.token);
+        localStorage.setItem("rol", dataResponse.data.usuario.Rol);
+        let rol = dataResponse.data.usuario.Rol;
+        if (rol == 'Paciente') {
+          localStorage.setItem("id", dataResponse.data.usuario.paciente.ID_Paciente);
+        }else if (rol == 'Médico') {
+          localStorage.setItem("id", dataResponse.data.usuario.medico.ID_Medico);
+        }
+
         this.router.navigate(['dashboard']);
       },
-      error => {
-        switch(error.error.response){
-          case 'USER_NOT_FOUND': {
-            this.showAnswerError("Error: El usuario no existe");
-            break;
+        error => {
+          switch (error.error.response) {
+            case 'USER_NOT_FOUND': {
+              this.showAnswerError("Error: El usuario no existe");
+              break;
+            }
+            case 'PASSWORD_INCORRECT': {
+              this.showAnswerError("Error: La contraseña es incorrecta");
+              break;
+            }
+            default: {
+              let message = "Error: " + error.status + " Ha ocurrio un error en el servidor al enviar los datos";
+              this.showAnswerError(message);
+            }
           }
-          case 'PASSWORD_INCORRECT': {
-            this.showAnswerError("Error: La contraseña es incorrecta");
-            break;
-          }
-          default: {
-            let message = "Error: " + error.status + " Ha ocurrio un error en el servidor al enviar los datos";
-            this.showAnswerError(message);
-          }
-        }
-      });
+        });
 
     }
 
@@ -70,19 +78,19 @@ export class LoginComponent implements OnInit {
   showAnswer(answer: any) {
     this.isSuccess = true;
     this.answer = answer;
-    setTimeout(() => { this.isSuccess = false }, 5000)
+    setTimeout(() => { this.isSuccess = false }, 2500)
   }
 
   showAnswerError(answer: any) {
     this.error = true;
     this.answer = answer;
-    setTimeout(() => { this.error = false }, 5000)
+    setTimeout(() => { this.error = false }, 2500)
   }
 
   showWarning(answer: string) {
     this.warning = true;
     this.answer = answer;
-    setTimeout(() => { this.warning = false }, 5000)
+    setTimeout(() => { this.warning = false }, 2500)
   }
 
 }

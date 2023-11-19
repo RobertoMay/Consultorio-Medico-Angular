@@ -17,13 +17,26 @@ export class UsuariosComponent implements OnInit{
   answer?: string;
   warning?: boolean;
   isSuccess?: boolean;
+  idBorrar?: number;
+  nombre?: string
+  rol!: string;
+  id!: number;
+  filteredCitasList: any[] = [];
+  searchTerm: string = '';
 
   constructor(private usuarioService: LoginService, private router: Router) { }
 
   ngOnInit(): void {
     if (localStorage.getItem('token')) {
+      this.rol = localStorage.getItem('rol')!;
+      this.id = Number(localStorage.getItem('id'))!;
+      if (this.rol != 'super-admin') {
+        this.router.navigate(['dashboard']);
+      }
       this.usuarioService.getAll().subscribe(data => {
         this.usuarios = data;
+        this.filteredCitasList = this.usuarios;
+
       },
         error => {
           let message = "Error: " + error.status + " Ha ocurrio un error en el servidor al cargar los datos";
@@ -33,6 +46,7 @@ export class UsuariosComponent implements OnInit{
       this.suscription = this.usuarioService.refresh$.subscribe(() => {
         this.usuarioService.getAll().subscribe(data => {
           this.usuarios = data;
+          this.filteredCitasList = data;
         })
       })
     } else {
@@ -48,15 +62,30 @@ export class UsuariosComponent implements OnInit{
     this.router.navigate(['nuevo-usuario']);
   }
 
-  delete(id: number) {
-    this.usuarioService.deletePatient(id).subscribe(data => {
+  borrar() {
+    this.usuarioService.deletePatient(this.idBorrar!).subscribe(data => {
       this.showAnswer("Usuario borrado con éxito");
     },
       error => {
         let message = "Error: " + error.status + " Ha ocurrido un error en el servidor";
         this.showAnswerError(message);
       })
+  }
 
+  delete(id: number, nombre: string) {
+    this.idBorrar = id;
+    this.nombre = nombre;    
+  }
+
+  search() {
+    if (this.searchTerm) {
+      this.filteredCitasList = this.usuarios.filter((cita) =>
+        cita.ID_Usuario.toString().includes(this.searchTerm) ||
+        cita.Nombre.toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
+    } else {
+      this.filteredCitasList = this.usuarios; 
+    }
   }
 
   showAnswer(answer: any) {

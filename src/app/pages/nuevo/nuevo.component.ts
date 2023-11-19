@@ -15,11 +15,18 @@ export class NuevoComponent implements OnInit {
   warning?: boolean;
   isSuccess?: boolean;
   form: FormGroup | any;
+  rol!: string;
+  id!: number;
 
   constructor(private fb: FormBuilder, private pacientesService: PacientesService, private router: Router) { }
 
   ngOnInit(): void {
     if (localStorage.getItem('token')) {
+      this.rol = localStorage.getItem('rol')!;
+      this.id = Number(localStorage.getItem('id'))!;
+      if (this.rol != 'super-admin') {
+        this.router.navigate(['pacientes']);
+      }
       this.setForm();
     } else {
       this.router.navigate(['login'])

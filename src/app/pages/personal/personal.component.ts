@@ -16,6 +16,10 @@ export class PersonalComponent implements OnInit{
   answer?: string;
   warning?: boolean;
   isSuccess?: boolean;
+  idBorrar?: number;
+  nombre?: string;
+  filteredCitasList: any[] = [];
+  searchTerm: string = '';
 
   constructor(private personalService: PersonalService, private router: Router) { }
 
@@ -23,6 +27,7 @@ export class PersonalComponent implements OnInit{
     if (localStorage.getItem('token')) {
       this.personalService.getAllPatients().subscribe(data => {
         this.personal = data;
+        this.filteredCitasList = this.personal;
       },
         error => {
           let message = "Error: " + error.status + " Ha ocurrio un error en el servidor al cargar los datos";
@@ -32,6 +37,7 @@ export class PersonalComponent implements OnInit{
       this.suscription = this.personalService.refresh$.subscribe(() => {
         this.personalService.getAllPatients().subscribe(data => {
           this.personal = data;
+          this.filteredCitasList = data;
         })
       })
     } else {
@@ -47,15 +53,30 @@ export class PersonalComponent implements OnInit{
     this.router.navigate(['nuevo-personal']);
   }
 
-  delete(id: number) {
-    this.personalService.deletePatient(id).subscribe(data => {
+  borrar() {
+    this.personalService.deletePatient(this.idBorrar!).subscribe(data => {
       this.showAnswer("Personal de consultorio borrado con éxito");
     },
       error => {
         let message = "Error: " + error.status + " El paciente se encuentra relacionado con otra tabla";
         this.showAnswerError(message);
       })
+  }
 
+  delete(id: number, nombre: string) {
+    this.idBorrar = id;
+    this.nombre = nombre;
+  }
+
+  search() {
+    if (this.searchTerm) {
+      this.filteredCitasList = this.personal.filter((cita) =>
+        cita.ID_Personal.toString().includes(this.searchTerm) ||
+        cita.Nombre.toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
+    } else {
+      this.filteredCitasList = this.personal; 
+    }
   }
 
   showAnswer(answer: any) {

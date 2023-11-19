@@ -17,6 +17,10 @@ export class NuevoHorarioMedicoComponent implements OnInit {
   warning?: boolean;
   isSuccess?: boolean;
   form: FormGroup | any;
+  rol!: string;
+  id!: number;
+  filteredCitasListM: any[] = [];
+  searchTermM: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -27,9 +31,15 @@ export class NuevoHorarioMedicoComponent implements OnInit {
 
   ngOnInit(): void {
     if (localStorage.getItem('token')) {
+      this.rol = localStorage.getItem('rol')!;
+      this.id = Number(localStorage.getItem('id'))!;
+      if (this.rol != 'super-admin') {
+        this.router.navigate(['horarios-medicos']);
+      }
       this.setForm();
       this.medicoService.getAll().subscribe(data => {
         this.medicos = data;
+        this.filteredCitasListM = this.medicos;
       },
         error => {
           let message = "Error: " + error.status + " Ha ocurrio un error en el servidor al cargar los datos";
@@ -68,6 +78,17 @@ export class NuevoHorarioMedicoComponent implements OnInit {
     }
 
 
+  }
+
+  searchM() {
+    if (this.searchTermM) {
+      this.filteredCitasListM = this.medicos.filter((cita) =>
+        cita.ID_Medico.toString().includes(this.searchTermM) ||
+        cita.Nombre.toLowerCase().includes(this.searchTermM.toLowerCase())
+      );
+    } else {
+      this.filteredCitasListM = this.medicos; 
+    }
   }
 
   volver() {

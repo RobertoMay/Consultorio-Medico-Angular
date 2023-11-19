@@ -2,139 +2,229 @@
 
 <div class="container mt-5">
 
-    <div class="col-sm-10 mb-4">
+    <ng-container *ngIf="rol == 'super-admin'">
+        <div class="col-sm-10 mb-4">
+            <div class="row">
+                <h1>Edita la Cita</h1>
+                <p>Ingresa los datos para editar una cita.</p>
+            </div>
+        </div>
+    
+        <div *ngIf="isSuccess" class="alert alert-success alerta bi bi-check" role="alert">
+            {{ answer }}
+        </div>
+        <div *ngIf="error" class="alert alert-danger alerta bi bi-exclamation-triangle-fill" role="alert">
+            {{ answer }}
+        </div>
+        <div *ngIf="warning" class="alert alert-warning alerta bi bi-exclamation-triangle" role="alert">
+            {{ answer }}
+        </div>
+    
+        <form [formGroup]="form" (submit)="update()">
+            <div class="row justify-content-center">
+                <div class="col-sm-6">
+                    <div class="mb-3">
+                        <label class="form-label">Id paciente</label>
+                        <input type="number" class="form-control" formControlName="ID_Paciente" placeholder="ID Paciente"
+                            [value]="" readonly>
+                        <ng-container *ngIf="form.get('ID_Paciente').touched && form.get('ID_Paciente').errors">
+                            <div class="form-text text-danger" *ngIf="form.get('ID_Paciente').errors.required">
+                                Ingresa al paciente
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="mb-3">
+                        <label class="form-label">Id Medico</label>
+                        <input type="number" class="form-control" formControlName="ID_Medico" placeholder="Id Médico"
+                            [value]="" readonly>
+                        <ng-container *ngIf="form.get('ID_Medico').touched && form.get('ID_Medico').errors">
+                            <div class="form-text text-danger" *ngIf="form.get('ID_Medico').errors.required">
+                                Ingresa al medico
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-sm-6">
+                    <div class="mb-3">
+                        <label class="form-label">Fecha y hora de la cita</label>
+                        <input type="datetime-local" class="form-control" formControlName="FechaHoraCita"
+                            placeholder="Fecha y hora de la cita"  value="2023-05-15">
+                        <ng-container *ngIf="form.get('FechaHoraCita').touched && form.get('FechaHoraCita').errors">
+                            <div class="form-text text-danger" *ngIf="form.get('FechaHoraCita').errors.required">
+                                Ingresa la fecha y la hora
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="mb-3">
+                        <label class="form-label">Motivo</label>
+                        <input type="text" class="form-control" formControlName="MotivoCita" placeholder="Motivo"
+                            [value]="">
+                        <ng-container *ngIf="form.get('MotivoCita').touched && form.get('MotivoCita').errors">
+                            <div class="form-text text-danger" *ngIf="form.get('MotivoCita').errors.required">
+                                Ingresa el motivo
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-sm-6">
+                    <div class="mb-3">
+                        <label class="form-label">Estado</label>
+                        <select class="form-select" formControlName="EstadoCita">
+                            <option value="" selected>Estado de la cita</option>
+                            <option value="Concluida">Concluida</option>
+                            <option value="Pendiente">Pendiente</option>
+                            <option value="Confirmada">Confirmada</option>
+                        </select>
+                        <ng-container *ngIf="form.get('EstadoCita').touched && form.get('EstadoCita').errors">
+                            <div class="form-text text-danger" *ngIf="form.get('EstadoCita').errors.required">
+                                Ingresa el estado
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="mb-3">
+                    </div>
+                </div>
+            </div>
+    
+            <div class="row justify-content-center py-2">
+                <div class="col-1">
+                    <button class="btn btn-warning" (click)="volver()">Volver</button>
+                </div>
+                <div class="col-1">
+                    <button class="btn btn-primary">Guardar</button>
+                </div>
+            </div>
+        </form>
+
+    </ng-container>
+
+    <ng-container *ngIf="rol == 'Médico'">
+        <div class="col-sm-10 mb-4">
+            <div class="row">
+                <h1>Edita la Cita</h1>
+                <p>Ingresa los datos para editar una cita.</p>
+            </div>
+        </div>
+    
+        <div *ngIf="isSuccess" class="alert alert-success alerta bi bi-check" role="alert">
+            {{ answer }}
+        </div>
+        <div *ngIf="error" class="alert alert-danger alerta bi bi-exclamation-triangle-fill" role="alert">
+            {{ answer }}
+        </div>
+        <div *ngIf="warning" class="alert alert-warning alerta bi bi-exclamation-triangle" role="alert">
+            {{ answer }}
+        </div>
+    
+        <form [formGroup]="form" (submit)="update()">
+            <div class="row justify-content-center">
+                <div class="col-sm-6">
+                    <div class="mb-3">
+                        <label class="form-label">Paciente</label>
+                        <input type="number" class="form-control" formControlName="ID_Paciente" placeholder="ID Paciente"
+                            [value]="" readonly>
+                        <ng-container *ngIf="form.get('ID_Paciente').touched && form.get('ID_Paciente').errors">
+                            <div class="form-text text-danger" *ngIf="form.get('ID_Paciente').errors.required">
+                                Ingresa al paciente
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="mb-3">
+                        <label class="form-label">Fecha y hora de la cita</label>
+                        <input type="datetime-local" class="form-control" formControlName="FechaHoraCita"
+                            placeholder="Fecha y hora de la cita"  value="2023-05-15">
+                        <ng-container *ngIf="form.get('FechaHoraCita').touched && form.get('FechaHoraCita').errors">
+                            <div class="form-text text-danger" *ngIf="form.get('FechaHoraCita').errors.required">
+                                Ingresa la fecha y la hora
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-sm-6">
+                    <div class="mb-3">
+                        <label class="form-label">Motivo</label>
+                        <input type="text" class="form-control" formControlName="MotivoCita" placeholder="Motivo"
+                            [value]="">
+                        <ng-container *ngIf="form.get('MotivoCita').touched && form.get('MotivoCita').errors">
+                            <div class="form-text text-danger" *ngIf="form.get('MotivoCita').errors.required">
+                                Ingresa el motivo
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="mb-3">
+                        <label class="form-label">Estado</label>
+                        <select class="form-select" formControlName="EstadoCita">
+                            <option value="" selected>Estado de la cita</option>
+                            <option value="Concluida">Concluida</option>
+                            <option value="Pendiente">Pendiente</option>
+                            <option value="Confirmada">Confirmada</option>
+                        </select>
+                        <ng-container *ngIf="form.get('EstadoCita').touched && form.get('EstadoCita').errors">
+                            <div class="form-text text-danger" *ngIf="form.get('EstadoCita').errors.required">
+                                Ingresa el estado
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+            
+    
+            <div class="row justify-content-center py-2">
+                <div class="col-1">
+                    <button class="btn btn-warning" (click)="volver()">Volver</button>
+                </div>
+                <div class="col-1">
+                    <button class="btn btn-primary">Guardar</button>
+                </div>
+            </div>
+        </form>
+
+        <!-- HORARIOS -->
         <div class="row">
-            <h1>Edita la Cita</h1>
-            <p>Ingresa los datos para editar una cita.</p>
-        </div>
-    </div>
-
-    <div *ngIf="isSuccess" class="alert alert-success alerta bi bi-check" role="alert">
-        {{ answer }}
-    </div>
-    <div *ngIf="error" class="alert alert-danger alerta bi bi-exclamation-triangle-fill" role="alert">
-        {{ answer }}
-    </div>
-    <div *ngIf="warning" class="alert alert-warning alerta bi bi-exclamation-triangle" role="alert">
-        {{ answer }}
-    </div>
-
-    <form [formGroup]="form" (submit)="update()">
-        <div class="row justify-content-center">
-            <div class="col-sm-6">
-                <div class="mb-3">
-                    <label class="form-label">Id paciente</label>
-                    <input type="number" class="form-control" formControlName="ID_Paciente" placeholder="ID Paciente"
-                        [value]="">
-                    <ng-container *ngIf="form.get('ID_Paciente').touched && form.get('ID_Paciente').errors">
-                        <div class="form-text text-danger" *ngIf="form.get('ID_Paciente').errors.required">
-                            Ingresa al paciente
-                        </div>
-                    </ng-container>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="mb-3">
-                    <label class="form-label">Id Medico</label>
-                    <input type="number" class="form-control" formControlName="ID_Medico" placeholder="Id Médico"
-                        [value]="">
-                    <ng-container *ngIf="form.get('ID_Medico').touched && form.get('ID_Medico').errors">
-                        <div class="form-text text-danger" *ngIf="form.get('ID_Medico').errors.required">
-                            Ingresa al medico
-                        </div>
-                    </ng-container>
-                </div>
-            </div>
-        </div>
-        <div class="row justify-content-center">
-            <div class="col-sm-6">
-                <div class="mb-3">
-                    <label class="form-label">Fecha y hora de la cita</label>
-                    <input type="datetime-local" class="form-control" formControlName="FechaHoraCita"
-                        placeholder="Fecha y hora de la cita"  value="2023-05-15">
-                    <ng-container *ngIf="form.get('FechaHoraCita').touched && form.get('FechaHoraCita').errors">
-                        <div class="form-text text-danger" *ngIf="form.get('FechaHoraCita').errors.required">
-                            Ingresa la fecha y la hora
-                        </div>
-                    </ng-container>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="mb-3">
-                    <label class="form-label">Motivo</label>
-                    <input type="text" class="form-control" formControlName="MotivoCita" placeholder="Motivo"
-                        [value]="">
-                    <ng-container *ngIf="form.get('MotivoCita').touched && form.get('MotivoCita').errors">
-                        <div class="form-text text-danger" *ngIf="form.get('MotivoCita').errors.required">
-                            Ingresa el motivo
-                        </div>
-                    </ng-container>
-                </div>
-            </div>
-        </div>
-        <div class="row justify-content-center">
-            <div class="col-sm-6">
-                <div class="mb-3">
-                    <label class="form-label">Estado</label>
-                    <input type="text" class="form-control" formControlName="EstadoCita" placeholder="Estado"
-                        [value]="">
-                    <ng-container *ngIf="form.get('EstadoCita').touched && form.get('EstadoCita').errors">
-                        <div class="form-text text-danger" *ngIf="form.get('EstadoCita').errors.required">
-                            Ingresa el estado
-                        </div>
-                    </ng-container>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="mb-3">
-                </div>
+            <div class="col-md-12 mt-5">
+                <h3 class="text-theme-center">Mi horario</h3>
+                <button class="btn btn-info bg-theme" routerLink="/horarios-medicos">Ver</button>
             </div>
         </div>
 
-        <div class="row justify-content-center py-2">
-            <div class="col-1">
-                <button class="btn btn-warning" (click)="volver()">Volver</button>
-            </div>
-            <div class="col-1">
-                <button class="btn btn-primary">Guardar</button>
-            </div>
-        </div>
-    </form>
-
-
-     <!-- PACIENTES -->
-
-     <div class="row">
-        <div class="col-md-12 mt-5">
-            <h3>Lista de los pacientes</h3>
-            <button class="btn btn-info bg-theme" routerLink="/pacientes">Ver</button>
-        </div>
-    </div>
-
-
-    <div class="row">
-        <div class="col-md-12">
+        <div class="row">
             <div class="col-md-12 mt-4">
                 <div class="card shadow-sm">
                     <div class="card-body">
                         <table class="table row-border hover">
                             <thead>
                                 <tr>
-                                    <th> ID </th>
-                                    <th> Nombre </th>
-                                    <th> Apellido </th>
-                                    <th> Télefono </th>
-                                    <th> Correo </th>
+                                    <th> No. </th>
+                                    <th> Médico </th>
+                                    <th> Días de la semana </th>
+                                    <th> Hora inicio </th>
+                                    <th> Hora fin </th>
                                 </tr>
                             </thead>
 
                             <tbody>
-                                <tr *ngFor="let paciente of pacientes">
-                                    <td class="col-2"> {{ paciente.ID_Paciente }} </td>
-                                    <td class="col-3"> {{paciente.Nombre}} </td>
-                                    <td class="col-2"> {{ paciente.Apellido }} </td>
-                                    <td class="col-2"> {{ paciente.Telefono }} </td>
-                                    <td class="col-3"> {{ paciente.CorreoElectronico }} </td>
+                                <tr *ngFor="let o of horariosP; let i = index">
+                                    <td class="col-1"> {{ i+1 }} </td>
+                                    <td class="col-2"> {{ o.medico.Nombre}} </td>
+                                    <td class="col-2"> {{ o.DiaSemana }} </td>
+                                    <td class="col-2"> {{ o.HoraInicio | date:"shortTime"}} </td>
+                                    <td class="col-2"> {{ o.HoraFin | date:"shortTime"}} </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -142,47 +232,8 @@
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- MEDICOS -->
-
-    <div class="row">
-        <div class="col-md-12 mt-5">
-            <h3>Lista de los médicos</h3>
-            <button class="btn btn-info bg-theme" routerLink="/medicos">Ver</button>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-12 mt-4">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <table class="table row-border hover">
-                        <thead>
-                            <tr>
-                                <th> ID </th>
-                                <th> Nombre </th>
-                                <th> Apellido </th>
-                                <th> Especialidad </th>
-                                <th> Correo </th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            <tr *ngFor="let o of medicos">
-                                <td class="col-2"> {{ o.ID_Medico }} </td>
-                                <td class="col-3"> {{ o.Nombre}} </td>
-                                <td class="col-2"> {{ o.Apellido }} </td>
-                                <td class="col-2"> {{ o.Especialidad }} </td>
-                                <td class="col-3"> {{ o.CorreoElectronico }} </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-        </div>
-    </div>
+    </ng-container>
 
 </div>
 

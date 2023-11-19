@@ -19,6 +19,8 @@ export class EditarFacturaComponent implements OnInit{
   answer?: string;
   warning?: boolean;
   isSuccess?: boolean;
+  rol!: string;
+  id!: number;
 
   constructor(
     private fb: FormBuilder,
@@ -31,6 +33,11 @@ export class EditarFacturaComponent implements OnInit{
 
   ngOnInit(): void {
     if (localStorage.getItem('token')) {
+      this.rol = localStorage.getItem('rol')!;
+      this.id = Number(localStorage.getItem('id'))!;
+      if (this.rol == 'Paciente') {
+        this.router.navigate(['facturas']);
+      }
       let id = Number(this.activeRouter.snapshot.paramMap.get('id'));
       this.api.getId(id).subscribe(data => {
         this.ob = data;

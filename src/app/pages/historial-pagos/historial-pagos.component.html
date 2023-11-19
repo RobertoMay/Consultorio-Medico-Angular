@@ -26,6 +26,30 @@
                 <div *ngIf="warning" class="alert alert-warning alerta bi bi-exclamation-triangle" role="alert">
                     {{ answer }}
                 </div>
+
+                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+                    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Borrar historial de pago</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                ¿Estas seguro que deseas borrar el historial de pago?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary"
+                                    data-bs-dismiss="modal">Cancelar</button>
+                                <button type="button" class="btn btn-danger" (click)="borrar()"
+                                    data-bs-dismiss="modal">Aceptar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
                 <div class="card shadow-sm">
                     <div class="card-body">
                         <table class="table row-border hover">
@@ -49,6 +73,7 @@
                                         <button class="btn btn-sm btn-warning m-1 bi bi-pen"
                                             (click)="editPatient(o.ID_HistorialPago)"></button>
                                         <button type="button" class="btn btn-sm btn-danger m-1 bi bi-trash"
+                                            data-bs-toggle="modal" data-bs-target="#staticBackdrop"
                                             (click)="delete(o.ID_HistorialPago)"></button>
                                     </td>
                                 </tr>

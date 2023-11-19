@@ -16,13 +16,22 @@ export class DashboardComponent implements OnInit {
   answer?: string;
   warning?: boolean;
   isSuccess?: boolean;
+  idBorrar?: number;
+  nombre?: string
+  rol!: string;
+  id!: number;
+  filteredCitasList: any[] = [];
+  searchTerm: string = '';
 
   constructor(private pacientesService: PacientesService, private router: Router) { }
 
   ngOnInit(): void {
     if (localStorage.getItem('token')) {
+      this.rol = localStorage.getItem('rol')!;
+      this.id = Number(localStorage.getItem('id'))!;
       this.pacientesService.getAllPatients().subscribe(data => {
         this.pacientes = data;
+        this.filteredCitasList = this.pacientes;
       },
         error => {
           let message = "Error: " + error.status + " Ha ocurrio un error en el servidor al cargar los datos";
@@ -32,6 +41,7 @@ export class DashboardComponent implements OnInit {
       this.suscription = this.pacientesService.refresh$.subscribe(() => {
         this.pacientesService.getAllPatients().subscribe(data => {
           this.pacientes = data;
+          this.filteredCitasList = data;
         })
       })
     } else {
@@ -47,15 +57,30 @@ export class DashboardComponent implements OnInit {
     this.router.navigate(['nuevo']);
   }
 
-  delete(id: number) {
-    this.pacientesService.deletePatient(id).subscribe(data => {
+  borrar() {
+    this.pacientesService.deletePatient(this.idBorrar!).subscribe(data => {
       this.showAnswer("Paciente borrado con éxito");
     },
       error => {
         let message = "Error: " + error.status + " El paciente se encuentra relacionado con otra tabla";
         this.showAnswerError(message);
       })
+  }
 
+  delete(id: number, nombre: string) {
+    this.idBorrar = id;
+    this.nombre = nombre;
+  }
+
+  search() {
+    if (this.searchTerm) {
+      this.filteredCitasList = this.pacientes.filter((cita) =>
+        cita.ID_Paciente.toString().includes(this.searchTerm) ||
+        cita.Nombre.toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
+    } else {
+      this.filteredCitasList = this.pacientes; 
+    }
   }
 
   showAnswer(answer: any) {

@@ -1,4 +1,4 @@
-<div *ngIf="isSuccess" class="alert alert-success alerta bi bi-check" role="alert">
+<!-- <div *ngIf="isSuccess" class="alert alert-success alerta bi bi-check" role="alert">
   {{ answer }}
 </div>
 <div *ngIf="error" class="alert alert-danger alerta bi bi-exclamation-triangle-fill" role="alert">
@@ -6,30 +6,34 @@
 </div>
 <div *ngIf="warning" class="alert alert-warning alerta bi bi-exclamation-triangle" role="alert">
   {{ answer }}
-</div>
+</div> -->
 
 
 <div class="wrapper fadeInDown my-5">
 
 
   <div id="formContent">
-    <!-- Tabs Titles -->
 
-    <!-- Icon -->
     <div class="fadeIn first">
       <img src="../../../assets/logo.jpg" id="icon" alt="User Icon" />
     </div>
 
-    <!-- Login Form -->
     <form [formGroup]="form" (submit)="onLogin(form.value)">
       <input type="text" id="login" class="fadeIn second" formControlName="CorreoElectronico" placeholder="Correo">
       <input type="password" id="password" class="fadeIn third" formControlName="Contraseña" placeholder="Contraseña">
       <input type="submit" class="fadeIn fourth" value="Iniciar Sesión">
     </form>
 
-    <!-- Remind Passowrd -->
     <div id="formFooter">
-      <!-- <a class="underlineHover" href="#">Forgot Password?</a> -->
+      <div  id="formFooter"*ngIf="isSuccess" class="alert alert-success bi bi-check" role="alert">
+        {{ answer }}
+      </div>
+      <div *ngIf="error" class="alert alert-danger bi bi-exclamation-triangle-fill" role="alert">
+        {{ answer }}
+      </div>
+      <div *ngIf="warning" class="alert alert-warning bi bi-exclamation-triangle" role="alert">
+        {{ answer }}
+      </div>
     </div>
 
   </div>

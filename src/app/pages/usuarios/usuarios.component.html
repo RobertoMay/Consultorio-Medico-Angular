@@ -28,6 +28,39 @@
                 <div *ngIf="warning" class="alert alert-warning alerta bi bi-exclamation-triangle" role="alert">
                     {{ answer }}
                 </div>
+
+                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+                    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Borrar usuario</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                ¿Estas seguro que deseas borrar al usuario {{ nombre }}?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary"
+                                    data-bs-dismiss="modal">Cancelar</button>
+                                <button type="button" class="btn btn-danger" (click)="borrar()"
+                                    data-bs-dismiss="modal">Aceptar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row col-5 mb-2 mt-2">
+                    <div class="input-group rounded" >
+                        <input type="search" class="form-control rounded" placeholder="Buscar" aria-label="Search"
+                            aria-describedby="search-addon" id="search" [(ngModel)]="searchTerm" (input)="search()"/>
+                        <span class="input-group-text border-0 nb" id="search-addon">
+                            <i class="bi bi-search"></i>
+                        </span>
+                    </div>
+                </div>
+
                 <div class="card shadow-sm">
                     <div class="card-body">
                         <table class="table row-border hover">
@@ -42,18 +75,21 @@
                             </thead>
 
                             <tbody>
-                                <tr *ngFor="let u of usuarios; let i = index">
-                                    <td class="col-1"> {{ i+1 }} </td>
-                                    <td class="col-3"> {{u.CorreoElectronico}} </td>
-                                    <td class="col-2"> {{ u.Nombre }} </td>
-                                    <td class="col-2    "> {{ u.Rol }} </td>
-                                    <td class="col-2">
-                                        <button class="btn btn-sm btn-warning m-1 bi bi-pen"
-                                            (click)="editPatient(u.ID_Usuario)"></button>
-                                        <button type="button" class="btn btn-sm btn-danger m-1 bi bi-trash"
-                                            (click)="delete(u.ID_Usuario)"></button>
-                                    </td>
-                                </tr>
+                                <ng-container *ngFor="let u of filteredCitasList; let i = index">
+                                    <tr *ngIf="u.Rol != 'super-admin'">
+                                        <td class="col-1"> {{ i+1 }} </td>
+                                        <td class="col-3"> {{u.CorreoElectronico}} </td>
+                                        <td class="col-2"> {{ u.Nombre }} </td>
+                                        <td class="col-2"> {{ u.Rol }} </td>
+                                        <td class="col-2">
+                                            <button class="btn btn-sm btn-warning m-1 bi bi-pen"
+                                                (click)="editPatient(u.ID_Usuario)"></button>
+                                            <button type="button" class="btn btn-sm btn-danger m-1 bi bi-trash"
+                                                data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                                                (click)="delete(u.ID_Usuario, u.Nombre)"></button>
+                                        </td>
+                                    </tr>
+                                </ng-container>
                             </tbody>
                         </table>
                     </div>

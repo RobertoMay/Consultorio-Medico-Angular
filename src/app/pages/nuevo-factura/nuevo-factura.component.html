@@ -4,8 +4,8 @@
 
     <div class="col-sm-10 mb-4">
         <div class="row">
-            <h1>Crea el Examen Médico</h1>
-            <p>Ingresa los datos para crear un nuevo examen médico.</p>
+            <h1>Crea la Factura</h1>
+            <p>Ingresa los datos para crear una nueva factura.</p>
         </div>
     </div>
 
@@ -51,7 +51,7 @@
             <div class="col-sm-6">
                 <div class="mb-3">
                     <label class="form-label">Total</label>
-                    <input type="text" class="form-control" formControlName="Total" placeholder="Total"
+                    <input type="number" class="form-control" formControlName="Total" placeholder="Total"
                         [value]="">
                     <ng-container *ngIf="form.get('Total').touched && form.get('Total').errors">
                         <div class="form-text text-danger" *ngIf="form.get('Total').errors.required">
@@ -63,8 +63,11 @@
             <div class="col-sm-6">
                 <div class="mb-3">
                     <label class="form-label">Estado</label>
-                    <input type="text" class="form-control" formControlName="EstadoPago" placeholder="Estado"
-                        [value]="">
+                    <select class="form-select" formControlName="EstadoPago">
+                        <option value="" selected>Estado</option>
+                        <option value="Pendiente">Pendiente</option>
+                        <option value="Pagada">Pagada</option>
+                    </select>
                     <ng-container *ngIf="form.get('EstadoPago').touched && form.get('EstadoPago').errors">
                         <div class="form-text text-danger" *ngIf="form.get('EstadoPago').errors.required">
                             Ingresa el estado
@@ -91,7 +94,15 @@
     <div class="row">
         <div class="col-md-12 mt-5">
             <h3>Lista de los pacientes</h3>
-            <button class="btn btn-info bg-theme" routerLink="/pacientes">Ver</button>
+        </div>
+    </div>
+    <div class="row col-5 mb-2 mt-2">
+        <div class="input-group rounded" >
+            <input type="search" class="form-control rounded" placeholder="Buscar" aria-label="Search"
+                aria-describedby="search-addon" id="search" [(ngModel)]="searchTerm" (input)="search()"/>
+            <span class="input-group-text border-0 nb" id="search-addon">
+                <i class="bi bi-search"></i>
+            </span>
         </div>
     </div>
 
@@ -113,7 +124,7 @@
                             </thead>
 
                             <tbody>
-                                <tr *ngFor="let paciente of pacientes">
+                                <tr *ngFor="let paciente of filteredCitasList">
                                     <td class="col-2"> {{ paciente.ID_Paciente }} </td>
                                     <td class="col-3"> {{paciente.Nombre}} </td>
                                     <td class="col-2"> {{ paciente.Apellido }} </td>

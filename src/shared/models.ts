@@ -172,4 +172,16 @@ export interface UsuarioI {
     Nombre: string;
     Contraseña: string;
     Rol: string;
+    ID_Paciente: any;
+    ID_Medico: any;
+}
+
+export interface UsuarioPostI {
+    ID_Usuario: number;
+    CorreoElectronico: string;
+    Nombre: string;
+    Contraseña: string;
+    Rol: string;
+    ID_Paciente: number;
+    ID_Medico: number;
 }

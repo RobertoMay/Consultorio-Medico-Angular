@@ -7,12 +7,15 @@ import { Router } from '@angular/router';
   styleUrls: ['./panel.component.css']
 })
 export class PanelComponent implements OnInit{
+  rol!: string;
 
   constructor(private router: Router) {}
 
   ngOnInit(): void {
     if (!localStorage.getItem('token')) {
       this.router.navigate(['login'])
+    }else {
+      this.rol = localStorage.getItem('rol')!;
     }
   }
 

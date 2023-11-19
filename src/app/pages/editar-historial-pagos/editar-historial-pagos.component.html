@@ -25,7 +25,7 @@
                 <div class="mb-3">
                     <label class="form-label">Id Factura</label>
                     <input type="number" class="form-control" formControlName="ID_Factura" placeholder="ID Factura"
-                        [value]="">
+                        [value]="" readonly>
                     <ng-container *ngIf="form.get('ID_Factura').touched && form.get('ID_Factura').errors">
                         <div class="form-text text-danger" *ngIf="form.get('ID_Factura').errors.required">
                             Ingresa el id de la factura
@@ -76,47 +76,6 @@
         </div>
     </form>
 
-
-   <!-- FACTURAS -->
-
-   <div class="row">
-    <div class="col-md-12 mt-5">
-        <h3>Lista de las facturas</h3>
-        <button class="btn btn-info bg-theme" routerLink="/facturas">Ver</button>
-    </div>
-</div>
-
-<div class="row justify-content-center">
-    <div class="row">
-        <div class="col-md-12 mt-4">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <table class="table row-border hover">
-                            <thead>
-                                <tr>
-                                    <th> ID Factura. </th>
-                                    <th> Paciente </th>
-                                    <th> Fecha de facturación </th>
-                                    <th> Total</th>
-                                    <th> EstadoPago </th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                <tr *ngFor="let o of facturas">
-                                    <td class="col-1"> {{ o.ID_Factura }} </td>
-                                    <td class="col-2"> {{ o.paciente.Nombre}} </td>
-                                    <td class="col-3"> {{ o.FechaFacturacion | date: "dd/MM/yyy"}} </td>
-                                    <td class="col-2"> ${{ o.Total }} </td>
-                                    <td class="col-2"> {{ o.EstadoPago }} </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 
 
